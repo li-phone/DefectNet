@@ -3,8 +3,9 @@ model = dict(
     type='CascadeRCNN',
     num_stages=3,
     pretrained='torchvision://resnet50',
-    dfn_weight=1.0,
-    background_id=1,
+    # defect finding network parameters
+    dfn_balance=dict(type='constant', init_weight=None, background_id=1),
+    # category_ids for not training
     ignore_ids=[1],
     backbone=dict(
         type='ResNet',
@@ -164,7 +165,7 @@ test_cfg = dict(
         score_thr=0.05, nms=dict(type='nms', iou_thr=0.5), max_per_img=100))
 # dataset settings
 dataset_type = 'CocoDataset'
-data_root = '/home/liphone/undone-work/data/detection/alcohol'
+data_root = '../work_dirs/data/bottle'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
@@ -197,21 +198,21 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + '/annotations/instance_train_alcohol.json',
+        ann_file=data_root + '/annotations/train.json',
         img_prefix=data_root + '/trainval/',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + '/annotations/instance_train_alcohol.json',
+        ann_file=data_root + '/annotations/train.json',
         img_prefix=data_root + '/trainval/',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + '/annotations/instance_test_alcohol.json',
+        ann_file=data_root + '/annotations/test.json',
         img_prefix=data_root + '/trainval/',
         pipeline=test_pipeline))
 # optimizer
-optimizer = dict(type='SGD', lr=0.02, momentum=0.9, weight_decay=0.0001)
+optimizer = dict(type='SGD', lr=0.02 / 8, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 # learning policy
 lr_config = dict(
@@ -230,14 +231,12 @@ log_config = dict(
     ])
 # yapf:enable
 # runtime settings
-dataset_name = 'alcohol'
+dataset_name = 'bottle'
 first_model_cfg = None
 total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-uid = None
-cfg_name = ''
-work_dir = '../work_dirs/' + dataset_name + '/cascade_rcnn_r50_fpn_1x/' + cfg_name
+work_dir = '../work_dirs/' + dataset_name + '/defectnet_linear_cascade_rcnn_r50_fpn_1x'
 resume_from = None
-load_from = None
+load_from = '../work_dirs/pretrained/cascade_rcnn_r50_fpn_1x_20190501-3b6211ab.pth'
 workflow = [('train', 1)]

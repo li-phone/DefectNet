@@ -2,6 +2,7 @@ from __future__ import division
 
 import torch
 import torch.nn as nn
+from mmcv.utils.config import Dict
 
 from mmdet.core import (bbox2result, bbox2roi, bbox_mapping, build_assigner,
                         build_sampler, merge_aug_bboxes, merge_aug_masks,
@@ -18,8 +19,7 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
     def __init__(self,
                  num_stages,
                  backbone,
-                 dfn_weight=None,
-                 background_id=None,
+                 dfn_balance=None,
                  ignore_ids=None,
                  neck=None,
                  shared_head=None,
@@ -38,10 +38,7 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
         self.num_stages = num_stages
         self.backbone = builder.build_backbone(backbone)
 
-        self.dfn_weight = dfn_weight
-        if self.dfn_weight is not None:
-            assert self.dfn_weight >= 0
-        self.background_id = background_id
+        self.dfn_balance = Dict(dfn_balance)
         self.ignore_ids = ignore_ids
 
         if neck is not None:
@@ -183,6 +180,21 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
                 outs = outs + (mask_pred,)
         return outs
 
+    def get_dfn_weight(self, n=None):
+        k = self.dfn_balance.scale_factor
+        w0 = self.dfn_balance.init_weight
+        if self.dfn_balance.type == 'constant':
+            return w0
+        elif self.dfn_balance.type == 'linear':
+            return -k * n + w0
+        elif self.dfn_balance.type == 'inverse':
+            return k * w0 / n
+        elif self.dfn_balance.type == 'exponent':
+            a = self.dfn_balance.base
+            return k * w0 / (a ** n)
+        else:
+            raise Exception('No {} implement'.format(str(self.dfn_balance.type)))
+
     def forward_train(self,
                       img,
                       img_meta,
@@ -190,7 +202,8 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
                       gt_labels,
                       gt_bboxes_ignore=None,
                       gt_masks=None,
-                      proposals=None):
+                      proposals=None,
+                      epoch=None):
         """
         Args:
             img (Tensor): of shape (N, C, H, W) encoding input images.
@@ -222,25 +235,30 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
 
         losses = dict()
 
+        # keep the original usage
         if self.dfn_weight is None:
             x = self.extract_feat(img)
         else:
-            # split the images into defect(1) image and normal(0) image
-            defect_nums = []
+            # count the number of defects in each image
+            defect_nums = [0] * img.shape[0]
             for i, gt_label in enumerate(gt_labels):
                 defect_cnt = 0
                 for label in gt_label:
                     if self.background_id != int(label):
                         defect_cnt += 1
-                defect_nums.append(defect_cnt)
+                defect_nums[i] = defect_cnt
 
-            # calculate find defect loss
+            # split the images into defect(1) image and normal(0) image
             dfn_labels = [0 if i == 0 else 1 for i in defect_nums]
             dfn_labels = torch.Tensor(dfn_labels).long().cuda()
 
+            # calculate dfn loss
             x, dfn_loss = self.extract_defect_feat(img, targets=dfn_labels)
+
+            # balance different network loss
+            dfn_weight = self.get_dfn_weight(epoch)
             loss_dfn = dfn_loss['loss']
-            loss_dfn = loss_dfn * self.dfn_weight
+            loss_dfn = loss_dfn * dfn_weight
             losses.update(loss_dfn=loss_dfn)
 
             # delete the ignored annotations
@@ -263,7 +281,7 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
                     x[i] = x[i][keep_ind]
                 x = tuple(x)
 
-                # if have no images, then set all loss to be 0 except find defect loss
+                # if have no any images, then set all loss to be 0 except dfn loss
                 if len(gt_labels) == 0 or len(gt_bboxes) == 0 or img.shape[0] == 0:
                     loss_zero = torch.Tensor([0]).float().cuda()
                     loss_one = torch.Tensor([1]).float().cuda()
