@@ -12,16 +12,12 @@ from mmcv.runner import init_dist
 from mmdet import __version__
 from mmdet.apis import get_root_logger, set_random_seed, train_detector
 from mmdet.datasets import build_dataset
-from mmdet.models import build_detector,build_backbone
+from mmdet.models import build_detector, build_backbone
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
-    parser.add_argument(
-        '--config',
-        default='../config_alcohol/cascade_rcnn_r50_fpn_1x/dig_augment_n4_id3.py',
-        help='train config file path',
-    )
+    parser.add_argument('--config', help='train config file path')
     parser.add_argument('--work_dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume_from', help='the checkpoint file to resume from')

@@ -4,7 +4,7 @@ model = dict(
     num_stages=3,
     pretrained='torchvision://resnet50',
     # defect finding network parameters
-    dfn_balance=dict(type='linear', init_weight=1.0, background_id=1),
+    dfn_balance=dict(type='linear', scale_factor=1.0, init_weight=1.0, background_id=1),
     # category_ids for not training
     ignore_ids=[1],
     backbone=dict(
@@ -221,7 +221,7 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=1.0 / 3,
     step=[8, 11])
-checkpoint_config = dict(interval=1)
+checkpoint_config = dict(interval=6)
 # yapf:disable
 log_config = dict(
     interval=50,

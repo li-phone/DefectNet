@@ -81,7 +81,7 @@ def parse_losses(losses):
     return loss, log_vars
 
 
-def batch_processor(model, data, train_mode):
+def batch_processor(model, data, train_mode, **kwargs):
     """Process a data batch.
 
     This method is required as an argument of Runner, which defines how to
@@ -97,7 +97,7 @@ def batch_processor(model, data, train_mode):
     Returns:
         dict: A dict containing losses and log vars.
     """
-    losses = model(**data)
+    losses = model(**data, **kwargs)
     loss, log_vars = parse_losses(losses)
 
     outputs = dict(

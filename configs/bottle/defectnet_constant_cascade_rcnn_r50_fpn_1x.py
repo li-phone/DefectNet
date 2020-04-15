@@ -221,7 +221,7 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=1.0 / 3,
     step=[8, 11])
-checkpoint_config = dict(interval=1)
+checkpoint_config = dict(interval=6)
 # yapf:disable
 log_config = dict(
     interval=50,
@@ -236,7 +236,7 @@ first_model_cfg = None
 total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = '../work_dirs/' + dataset_name + '/defectnet_linear_cascade_rcnn_r50_fpn_1x'
+work_dir = '../work_dirs/' + dataset_name + '/defectnet_constant_cascade_rcnn_r50_fpn_1x'
 resume_from = None
 load_from = '../work_dirs/pretrained/cascade_rcnn_r50_fpn_1x_20190501-3b6211ab.pth'
 workflow = [('train', 1)]

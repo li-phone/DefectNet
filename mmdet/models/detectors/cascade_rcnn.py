@@ -188,7 +188,7 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
         elif self.dfn_balance.type == 'linear':
             return -k * n + w0
         elif self.dfn_balance.type == 'inverse':
-            return k * w0 / n
+            return k * w0 / (n + 1)
         elif self.dfn_balance.type == 'exponent':
             a = self.dfn_balance.base
             return k * w0 / (a ** n)
@@ -236,7 +236,7 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
         losses = dict()
 
         # keep the original usage
-        if self.dfn_weight is None:
+        if self.dfn_balance is None:
             x = self.extract_feat(img)
         else:
             # count the number of defects in each image
@@ -244,7 +244,7 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
             for i, gt_label in enumerate(gt_labels):
                 defect_cnt = 0
                 for label in gt_label:
-                    if self.background_id != int(label):
+                    if self.dfn_balance.background_id != int(label):
                         defect_cnt += 1
                 defect_nums[i] = defect_cnt
 

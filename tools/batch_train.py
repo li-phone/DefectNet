@@ -8,7 +8,7 @@ import copy
 import json
 import numpy as np
 import os.path as osp
-from batch_process import batch_train, batch_test, batch_infer
+from batch_process import batch_train, batch_test
 
 BASH_DIR = os.path.dirname(os.path.abspath(__file__))
 os.chdir(BASH_DIR)
@@ -30,8 +30,9 @@ class BatchTrain(object):
             cfg = mmcv.Config.fromfile(self.cfg_path)
             cfg.model['dfn_balance']['init_weight'] = weight
 
-            cfg.uid = 'const_weight={}'.format(weight)
-            cfg.work_dir = os.path.join(cfg.work_dir, cfg.cfg_name, cfg.uid)
+            cfg.uid = weight
+            cfg.cfg_name = 'const_weight={}'.format(cfg.uid)
+            cfg.work_dir = os.path.join(cfg.work_dir, cfg.cfg_name)
 
             cfg.resume_from = os.path.join(cfg.work_dir, 'latest.pth')
             if not os.path.exists(cfg.resume_from):
@@ -39,9 +40,8 @@ class BatchTrain(object):
             cfgs.append(cfg)
         batch_train(cfgs, sleep_time=self.train_sleep_time)
         save_path = os.path.join(self.cfg_dir, str(self.cfg_name) + '_test.txt')
-        batch_test(cfgs, save_path, self.test_sleep_time, mode=self.data_mode)
-
-        # batch_infer(cfgs)
+        if self.test_sleep_time >= 0:
+            batch_test(cfgs, save_path, self.test_sleep_time, mode=self.data_mode)
 
     def common_train(self):
         cfg = mmcv.Config.fromfile(self.cfg_path)
@@ -57,7 +57,6 @@ class BatchTrain(object):
         save_path = os.path.join(self.cfg_dir, str(self.cfg_name) + '_{}.txt'.format(self.data_mode))
         if self.test_sleep_time >= 0:
             batch_test(cfgs, save_path, self.test_sleep_time, mode=self.data_mode)
-        batch_infer(cfgs)
 
 
 def main():

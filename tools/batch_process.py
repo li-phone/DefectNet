@@ -10,7 +10,6 @@ import numpy as np
 import os.path as osp
 from train import main as train_main
 from defect_test import main as test_main
-from infer import main as infer_main
 
 BASH_DIR = os.path.dirname(os.path.abspath(__file__))
 os.chdir(BASH_DIR)
@@ -78,27 +77,3 @@ def batch_test(cfgs, save_dir, sleep_time=0, mode='test', json_out_heads=None):
         eval_report(osp.join(save_dir, save_name + '.txt'), report, cfg=cfg_name, uid=cfg.uid, mode=mode)
         print('{} eval test done!'.format(cfg_name))
         time.sleep(sleep_time)
-
-
-def batch_infer(cfgs):
-    for cfg in tqdm(cfgs):
-        cfg_name = os.path.basename(cfg.work_dir)
-        print('\ncfg: {}'.format(cfg_name))
-        if 'ignore_ids' in cfg.data['test']:
-            if cfg.data['test']['ignore_ids'] is None:
-                have_bg = False
-            else:
-                have_bg = True
-        else:
-            have_bg = False
-        infer_params = dict(
-            config=cfg,
-            resume_from=osp.join(cfg.work_dir, 'latest.pth'),
-            infer_object=cfg.data['test']['ann_file'],
-            img_dir=cfg.data['test']['img_prefix'],
-            work_dir=cfg.work_dir,
-            submit_out=osp.join(cfg.work_dir, '{}_submit+epoch_{}.json'.format(cfg_name, 'latest')),
-            have_bg=have_bg,
-        )
-        infer_main(**infer_params)
-        print('{} infer done!'.format(cfg_name))
