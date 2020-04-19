@@ -5,7 +5,7 @@ model = dict(
     pretrained='torchvision://resnet50',
     # defect finding network parameters
     dfn_balance=dict(type='exponent', scale_factor=1.0, init_weight=1.0, base=2.0, background_id=1),
-    # category_ids for not training
+    # category_ids for not training, start from 1
     ignore_ids=[1],
     backbone=dict(
         type='ResNet',
@@ -201,15 +201,12 @@ data = dict(
         ann_file=data_root + '/annotations/train.json',
         img_prefix=data_root + '/trainval/',
         pipeline=train_pipeline),
-    val=dict(
-        type=dataset_type,
-        ann_file=data_root + '/annotations/train.json',
-        img_prefix=data_root + '/trainval/',
-        pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
         ann_file=data_root + '/annotations/test.json',
         img_prefix=data_root + '/trainval/',
+        # category_ids for not coco_eval, start from 0
+        ignore_ids=[0],
         pipeline=test_pipeline))
 # optimizer
 optimizer = dict(type='SGD', lr=0.02 / 8, momentum=0.9, weight_decay=0.0001)

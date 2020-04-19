@@ -50,9 +50,9 @@ def coco_eval(result_files,
             cocoEval.params.maxDets = list(max_dets)
         cocoEval.evaluate()
         cocoEval.accumulate()
-        stats, coco_rpt = cocoEval.summarize(ignore_ids=ignore_ids)
+        stats, coco_eval_lines = cocoEval.summarize(ignore_ids=ignore_ids)
 
-        class_rpt, classwise_data = '', {}
+        class_lines, classwise_data = '', {}
         if classwise:
             # Compute per-category AP
             # from https://github.com/facebookresearch/detectron2/blob/03064eb5bafe4a3e5750cc7a16672daf5afe8435/detectron2/evaluation/coco_evaluation.py#L259-L283 # noqa
@@ -82,11 +82,12 @@ def coco_eval(result_files,
             table_data = [headers]
             table_data += [result for result in results_2d]
             table = AsciiTable(table_data)
-            class_rpt = str(table.table)
-            print(class_rpt)
+            class_lines = str(table.table)
+            print(class_lines)
         stats = [x for x in stats]
+        log = '\n'.join(['\n', coco_eval_lines, class_lines])
         reports[res_type] = dict(
-            log=dict(coco_eval=coco_rpt, classwise=class_rpt),
+            log=log,
             data=dict(coco_eval=stats, classwise=classwise_data),
         )
     return reports

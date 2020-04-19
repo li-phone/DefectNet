@@ -577,27 +577,28 @@ class ResNet(nn.Module):
 
         # 3. compatible with image classification network
         else:
+            raise Exception('not implement!')
             # test mode, no targets
-            if len(ann) == 0 or ('return_loss' in ann and not ann['return_loss']):
-                return x2
-            else:
-                if 'targets' not in ann:
-                    defect_nums = []
-                    for i, gt_label in enumerate(ann['gt_labels']):
-                        defect_cnt = 0
-                        for label in gt_label:
-                            if 1 != int(label):
-                                defect_cnt += 1
-                        defect_nums.append(defect_cnt)
-
-                    # calculate find defect loss
-                    targets = [0 if i == 0 else 1 for i in defect_nums]
-                    targets = torch.Tensor(targets).long().cuda()
-                    ann['targets'] = targets
-
-                loss = self.loss_fun(x2, ann['targets'])
-                loss_dict = dict(loss=loss)
-                return loss_dict
+            # if len(ann) == 0 or ('return_loss' in ann and not ann['return_loss']):
+            #     return x2
+            # else:
+            #     if 'targets' not in ann:
+            #         defect_nums = []
+            #         for i, gt_label in enumerate(ann['gt_labels']):
+            #             defect_cnt = 0
+            #             for label in gt_label:
+            #                 if 1 != int(label):
+            #                     defect_cnt += 1
+            #             defect_nums.append(defect_cnt)
+            #
+            #         # calculate find defect loss
+            #         targets = [0 if i == 0 else 1 for i in defect_nums]
+            #         targets = torch.Tensor(targets).long().cuda()
+            #         ann['targets'] = targets
+            #
+            #     loss = self.loss_fun(x2, ann['targets'])
+            #     loss_dict = dict(loss=loss)
+            #     return loss_dict
 
     def train(self, mode=True):
         super(ResNet, self).train(mode)

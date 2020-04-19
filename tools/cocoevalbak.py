@@ -480,32 +480,38 @@ class COCOeval:
             stats[0], lines[0] = self._summarize(1, ignore_ids=ignore_ids)
             stats[1], lines[1] = self._summarize(1, iouThr=.5, maxDets=self.params.maxDets[2], ignore_ids=ignore_ids)
             stats[2], lines[2] = self._summarize(1, iouThr=.75, maxDets=self.params.maxDets[2], ignore_ids=ignore_ids)
-            stats[3], lines[3] = self._summarize(1, areaRng='small', maxDets=self.params.maxDets[2], ignore_ids=ignore_ids)
-            stats[4], lines[4] = self._summarize(1, areaRng='medium', maxDets=self.params.maxDets[2], ignore_ids=ignore_ids)
-            stats[5], lines[5] = self._summarize(1, areaRng='large', maxDets=self.params.maxDets[2], ignore_ids=ignore_ids)
+            stats[3], lines[3] = self._summarize(1, areaRng='small', maxDets=self.params.maxDets[2],
+                                                 ignore_ids=ignore_ids)
+            stats[4], lines[4] = self._summarize(1, areaRng='medium', maxDets=self.params.maxDets[2],
+                                                 ignore_ids=ignore_ids)
+            stats[5], lines[5] = self._summarize(1, areaRng='large', maxDets=self.params.maxDets[2],
+                                                 ignore_ids=ignore_ids)
             stats[6], lines[6] = self._summarize(0, maxDets=self.params.maxDets[0], ignore_ids=ignore_ids)
             stats[7], lines[7] = self._summarize(0, maxDets=self.params.maxDets[1], ignore_ids=ignore_ids)
             stats[8], lines[8] = self._summarize(0, maxDets=self.params.maxDets[2], ignore_ids=ignore_ids)
-            stats[9], lines[9] = self._summarize(0, areaRng='small', maxDets=self.params.maxDets[2], ignore_ids=ignore_ids)
+            stats[9], lines[9] = self._summarize(0, areaRng='small', maxDets=self.params.maxDets[2],
+                                                 ignore_ids=ignore_ids)
             stats[10], lines[10] = self._summarize(0, areaRng='medium', maxDets=self.params.maxDets[2],
-                                              ignore_ids=ignore_ids)
-            stats[11], lines[11] = self._summarize(0, areaRng='large', maxDets=self.params.maxDets[2], ignore_ids=ignore_ids)
+                                                   ignore_ids=ignore_ids)
+            stats[11], lines[11] = self._summarize(0, areaRng='large', maxDets=self.params.maxDets[2],
+                                                   ignore_ids=ignore_ids)
 
             return stats, lines
 
         def _summarizeKps():
             stats = np.zeros((10,))
-            stats[0] = self._summarize(1, maxDets=20, ignore_ids=ignore_ids)
-            stats[1] = self._summarize(1, maxDets=20, iouThr=.5, ignore_ids=ignore_ids)
-            stats[2] = self._summarize(1, maxDets=20, iouThr=.75, ignore_ids=ignore_ids)
-            stats[3] = self._summarize(1, maxDets=20, areaRng='medium', ignore_ids=ignore_ids)
-            stats[4] = self._summarize(1, maxDets=20, areaRng='large', ignore_ids=ignore_ids)
-            stats[5] = self._summarize(0, maxDets=20, ignore_ids=ignore_ids)
-            stats[6] = self._summarize(0, maxDets=20, iouThr=.5, ignore_ids=ignore_ids)
-            stats[7] = self._summarize(0, maxDets=20, iouThr=.75, ignore_ids=ignore_ids)
-            stats[8] = self._summarize(0, maxDets=20, areaRng='medium', ignore_ids=ignore_ids)
-            stats[9] = self._summarize(0, maxDets=20, areaRng='large', ignore_ids=ignore_ids)
-            return stats, []
+            lines = [''] * 10
+            stats[0], lines[0] = self._summarize(1, maxDets=20, ignore_ids=ignore_ids)
+            stats[1], lines[1] = self._summarize(1, maxDets=20, iouThr=.5, ignore_ids=ignore_ids)
+            stats[2], lines[2] = self._summarize(1, maxDets=20, iouThr=.75, ignore_ids=ignore_ids)
+            stats[3], lines[3] = self._summarize(1, maxDets=20, areaRng='medium', ignore_ids=ignore_ids)
+            stats[4], lines[4] = self._summarize(1, maxDets=20, areaRng='large', ignore_ids=ignore_ids)
+            stats[5], lines[5] = self._summarize(0, maxDets=20, ignore_ids=ignore_ids)
+            stats[6], lines[6] = self._summarize(0, maxDets=20, iouThr=.5, ignore_ids=ignore_ids)
+            stats[7], lines[7] = self._summarize(0, maxDets=20, iouThr=.75, ignore_ids=ignore_ids)
+            stats[8], lines[8] = self._summarize(0, maxDets=20, areaRng='medium', ignore_ids=ignore_ids)
+            stats[9], lines[9] = self._summarize(0, maxDets=20, areaRng='large', ignore_ids=ignore_ids)
+            return stats, lines
 
         if not self.eval:
             raise Exception('Please run accumulate() first')

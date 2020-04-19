@@ -8,7 +8,7 @@ import time
 import pandas as pd
 import numpy as np
 import json
-from pandas.io.json import json_normalize
+from pandas import json_normalize
 from sklearn.metrics import classification_report
 
 import mmcv
@@ -45,7 +45,6 @@ def single_gpu_test(model, data_loader, show=False, first_model=None):
                     torch.cuda.synchronize()
                     end_t = time.time()
                     result_times.append(end_t - start_t + first_infer_times[0])
-
             else:
                 torch.cuda.synchronize()
                 start_t = time.time()
@@ -53,7 +52,6 @@ def single_gpu_test(model, data_loader, show=False, first_model=None):
                 torch.cuda.synchronize()
                 end_t = time.time()
                 result_times.append(end_t - start_t)
-
         if isinstance(result, list):
             results.append(result)
         elif isinstance(result, int):
@@ -62,7 +60,6 @@ def single_gpu_test(model, data_loader, show=False, first_model=None):
         else:
             r = [np.empty([0, 5], dtype=np.float32) for i in range(len(dataset.cat2label))]
             results.append(r)
-
         if show:
             model.module.show_result(data, result)
         batch_size = data['img'][0].size(0)
@@ -99,7 +96,7 @@ def have_defect(anns, images, threshold=0.05, background_id=0):
     return det_results
 
 
-def defect_eval(det_result, gt_result, result_times, threshold=0.05):
+def defect_eval(det_result, gt_result, result_times, threshold):
     pred_nums = have_defect(det_result, gt_result['images'], threshold)
     y_pred = [0 if x == 0 else 1 for x in pred_nums]
     true_nums = have_defect(gt_result, gt_result['images'], threshold)
@@ -112,14 +109,15 @@ def defect_eval(det_result, gt_result, result_times, threshold=0.05):
     normal_fps = [result_times[i] for i, x in enumerate(y_true) if x == 0]
 
     assert len(defect_fps) + len(normal_fps) == len(result_times)
+    log = '\n'.join(['\n', find_ability_rpt,
+                     'att={}'.format(np.mean(result_times)),
+                     'att_defective={}'.format(np.mean(defect_fps)),
+                     'att_normal={}'.format(np.mean(normal_fps))])
     return dict(
-        log=dict(
-            find_ability=find_ability_rpt, fps=np.mean(result_times),
-            defect_fps=np.mean(defect_fps), normal_fps=np.mean(normal_fps),
-        ),
+        log=log,
         data=dict(
-            find_ability=find_ability, fps=result_times,
-            defect_fps=defect_fps, normal_fps=normal_fps,
+            find_ability=find_ability, att=result_times,
+            att_defective=defect_fps, att_normal=normal_fps,
         ),
     )
 
@@ -244,14 +242,8 @@ def collect_results_gpu(result_part, size):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='MMDet test detector')
-    parser.add_argument(
-        '--config',
-        default='../config_alcohol/cascade_rcnn_r50_fpn_1x/baseline.py',
-        help='test config file path')
-    parser.add_argument(
-        '--checkpoint',
-        default=None,
-        help='checkpoint file')
+    parser.add_argument('--config', help='test config file path')
+    parser.add_argument('--checkpoint', help='checkpoint file')
     parser.add_argument(
         '--out',
         default=None,
@@ -328,8 +320,10 @@ def main(**kwargs):
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True
     cfg.model.pretrained = None
-    cfg.data.val.test_mode = True
-    cfg.data.test.test_mode = True
+    if 'val' in cfg.data:
+        cfg.data.val.test_mode = True
+    if 'test' in cfg.data:
+        cfg.data.test.test_mode = True
 
     # init distributed env first, since logger depends on the dist info.
     if args.launcher == 'none':
@@ -374,7 +368,6 @@ def main(**kwargs):
                                                args.gpu_collect)
 
     rank, _ = get_dist_info()
-    rpts = {}
     if args.out and rank == 0:
         print('\nwriting results to {}'.format(args.out))
         mmcv.dump(outputs, args.out)
@@ -383,20 +376,21 @@ def main(**kwargs):
             print('Starting evaluate {}'.format(' and '.join(eval_types)))
             if eval_types == ['proposal_fast']:
                 result_file = args.out
-                rpts = coco_eval(result_file, eval_types, dataset.coco, classwise=True)
+                coco_eval(result_file, eval_types, dataset.coco, classwise=True)
             else:
                 if not isinstance(outputs[0], dict):
                     result_files = results2json(dataset, outputs, args.out)
-                    rpts = coco_eval(result_files, eval_types, dataset.coco, classwise=True)
+                    coco_eval(result_files, eval_types, dataset.coco, classwise=True)
                 else:
                     for name in outputs[0]:
                         print('\nEvaluating {}'.format(name))
                         outputs_ = [out[name] for out in outputs]
                         result_file = args.out + '.{}'.format(name)
                         result_files = results2json(dataset, outputs_, result_file)
-                        rpts = coco_eval(result_files, eval_types, dataset.coco, classwise=True)
+                        coco_eval(result_files, eval_types, dataset.coco, classwise=True)
 
     # Save predictions in the COCO json format
+    defect_test_results = {}
     if args.json_out and rank == 0:
         if not isinstance(outputs[0], dict):
             result_files = results2json(dataset, outputs, args.json_out)
@@ -405,18 +399,19 @@ def main(**kwargs):
                 print('Starting evaluate {}'.format(' and '.join(eval_types)))
                 if 'ignore_ids' not in cfg.data[args.mode]:
                     cfg.data[args.mode]['ignore_ids'] = None
-                rpts = coco_eval(result_files, eval_types, dataset.coco, classwise=True,
-                                 ignore_ids=cfg.data[args.mode]['ignore_ids'])
-                defect_rpt = defect_eval(result_files['bbox'], dataset.coco.dataset, result_times,
-                                         threshold=cfg.test_cfg['rcnn']['score_thr'])
-                rpts['bbox']['log']['defect_eval'] = defect_rpt['log']
-                rpts['bbox']['data']['defect_eval'] = defect_rpt['data']
+                ignore_ids = cfg.data[args.mode]['ignore_ids']
+                coco_result = coco_eval(result_files, eval_types, dataset.coco, classwise=True, ignore_ids=ignore_ids)
+                threshold = cfg.test_cfg['rcnn']['score_thr']
+                defect_rst = defect_eval(result_files['bbox'], dataset.coco.dataset, result_times, threshold=threshold)
+                defect_test_results.update(log='\n'.join([coco_result['bbox']['log'], defect_rst['log']]))
+                defect_test_results.update(coco_result=coco_result['bbox']['data'])
+                defect_test_results.update(defect_result=defect_rst['data'])
         else:
             for name in outputs[0]:
                 outputs_ = [out[name] for out in outputs]
                 result_file = args.json_out + '.{}'.format(name)
                 results2json(dataset, outputs_, result_file)
-    return rpts
+    return defect_test_results
 
 
 if __name__ == '__main__':

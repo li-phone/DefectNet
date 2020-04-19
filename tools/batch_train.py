@@ -31,7 +31,7 @@ class BatchTrain(object):
             cfg.model['dfn_balance']['init_weight'] = weight
 
             cfg.uid = weight
-            cfg.cfg_name = 'const_weight={}'.format(cfg.uid)
+            cfg.cfg_name = 'const_weight={:.2f}'.format(cfg.uid)
             cfg.work_dir = os.path.join(cfg.work_dir, cfg.cfg_name)
 
             cfg.resume_from = os.path.join(cfg.work_dir, 'latest.pth')
@@ -54,7 +54,7 @@ class BatchTrain(object):
 
         cfgs = [cfg]
         batch_train(cfgs, sleep_time=self.train_sleep_time)
-        save_path = os.path.join(self.cfg_dir, str(self.cfg_name) + '_{}.txt'.format(self.data_mode))
+        save_path = os.path.join(cfg.work_dir, str(self.cfg_name) + '_{}.txt'.format(self.data_mode))
         if self.test_sleep_time >= 0:
             batch_test(cfgs, save_path, self.test_sleep_time, mode=self.data_mode)
 

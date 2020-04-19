@@ -421,9 +421,9 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
         Returns:
             dict: results
         """
-        if self.dfn_weight is None:
+        if self.dfn_balance is None:
             x = self.extract_feat(img)
-        elif self.dfn_weight == 0:
+        elif self.dfn_balance.init_weight == 0:
             x, x2 = self.extract_defect_feat(img)
             if self.with_neck:
                 x = self.neck(x)
