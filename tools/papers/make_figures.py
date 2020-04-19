@@ -80,8 +80,8 @@ def make_figures():
         ax.set_xlim(0, 1)
         ax.set_ylim(0, 1)
         ax.grid(linestyle='--')
-    plt.show()
     save_plt('./figures/Figure_3.Detection_efficiency_on_a.jpg')
+    plt.show()
 
 
 if __name__ == "__main__":
