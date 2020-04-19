@@ -11,14 +11,14 @@ def train_models():
     # train for exponent defect finding network loss weight
     BatchTrain(cfg_path='../configs/bottle/defectnet_exponent_cascade_rcnn_r50_fpn_1x.py',
                data_mode='test', train_sleep_time=0, test_sleep_time=60).common_train()
-
-    # train for inverse defect finding network loss weight
-    BatchTrain(cfg_path='../configs/bottle/defectnet_inverse_cascade_rcnn_r50_fpn_1x.py',
-               data_mode='test', train_sleep_time=0, test_sleep_time=60).common_train()
+    #
+    # # train for inverse defect finding network loss weight
+    # BatchTrain(cfg_path='../configs/bottle/defectnet_inverse_cascade_rcnn_r50_fpn_1x.py',
+    #            data_mode='test', train_sleep_time=0, test_sleep_time=60).common_train()
 
     # train for linear defect finding network loss weight
-    BatchTrain(cfg_path='../configs/bottle/defectnet_linear_cascade_rcnn_r50_fpn_1x.py',
-               data_mode='test', train_sleep_time=0, test_sleep_time=60).common_train()
+    # BatchTrain(cfg_path='../configs/bottle/defectnet_linear_cascade_rcnn_r50_fpn_1x.py',
+    #            data_mode='test', train_sleep_time=0, test_sleep_time=60).common_train()
 
     # To make Figure 5.
     # train for finding best constant defect finding network loss weight

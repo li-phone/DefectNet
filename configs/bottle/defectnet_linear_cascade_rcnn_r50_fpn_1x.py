@@ -4,7 +4,7 @@ model = dict(
     num_stages=3,
     pretrained='torchvision://resnet50',
     # defect finding network parameters
-    dfn_balance=dict(type='linear', scale_factor=1.0, init_weight=1.0, background_id=1),
+    dfn_balance=dict(type='linear', scale_factor=1.0 / 12, init_weight=1.0, background_id=1),
     # category_ids for not training, start from 1
     ignore_ids=[1],
     backbone=dict(
