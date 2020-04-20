@@ -38,7 +38,10 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
         self.num_stages = num_stages
         self.backbone = builder.build_backbone(backbone)
 
-        self.dfn_balance = Dict(dfn_balance)
+        if dfn_balance is None:
+            self.dfn_balance = dfn_balance
+        else:
+            self.dfn_balance = Dict(dfn_balance)
         self.ignore_ids = ignore_ids
 
         if neck is not None:
