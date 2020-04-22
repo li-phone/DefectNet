@@ -1,5 +1,8 @@
 import os
+import json
 import numpy as np
+import pandas as pd
+from pandas import json_normalize
 import matplotlib.pyplot as plt
 import matplotlib.style as mplstyle
 
@@ -43,8 +46,11 @@ def line_plot(ax, x, ys, labels=None, styles=None, param_dict=None):
         list of artists added
     """
     for i, y in enumerate(ys):
-        if labels is not None and styles is not None:
-            ax.plot(x, y, label=labels[i], linestyle=styles[i])
+        if labels is not None:
+            if styles is not None:
+                ax.plot(x, y, label=labels[i], linestyle=styles[i])
+            else:
+                ax.plot(x, y, label=labels[i])
         else:
             ax.plot(x, y)
     if param_dict is not None:
@@ -55,7 +61,44 @@ def line_plot(ax, x, ys, labels=None, styles=None, param_dict=None):
     return ax
 
 
-def make_figures():
+def read_json(json_path):
+    results = []
+    np_names = [
+        'AP', 'AP:0.50', 'AP:0.75', 'AP:S', 'AP:M', 'AP:L',
+        'AR', 'AR:0.50', 'AR:0.75', 'AR:S', 'AR:M', 'AR:L',
+    ]
+    with open(json_path) as fp:
+        lines = fp.readlines()
+        for line in lines:
+            r = json.loads(line)
+            d = r['data']
+            x_label = float(r['uid'].split('=')[1])
+            result = dict(cfg=r['cfg'], uid=x_label, mode=r['mode'])
+            for k, v in zip(np_names, d['coco_result']['coco_eval']):
+                result[k] = v
+            for k, v in d['coco_result']['classwise'].items():
+                result[k] = v
+            for k1, v1 in d['defect_result'].items():
+                if isinstance(v1, list):
+                    result[k1] = np.mean(v1)
+                elif isinstance(v1, dict):
+                    for k2, v2 in v1['macro avg'].items():
+                        result[k2] = v2
+            results.append(result)
+    return results
+
+
+def phrase_json(json_path):
+    save_path = json_path[:-5] + '.csv'
+    if os.path.exists(save_path):
+        return pd.read_csv(save_path)
+    results = read_json(json_path)
+    df = json_normalize(results)
+    df.to_csv(save_path, index=False)
+    return df
+
+
+def make_figure3():
     # make Figure 3
     fig = plt.figure(figsize=(6.4 * 3, 4.8))
     axes = [fig.add_subplot(1, 3, i) for i in range(1, 4)]
@@ -85,5 +128,47 @@ def make_figures():
     plt.show()
 
 
+def make_evaluation_figure(data_path, save_name):
+    data = phrase_json(data_path)
+    fig = plt.figure(figsize=(6.4 * 3, 4.8))
+    axes = [fig.add_subplot(1, 3, i) for i in range(1, 4)]
+
+    # draw_ap
+    x, ys, labels = data['uid'], [data['AP']], ['AP']
+    param_dict = {'xlabel': 'score_threshold', 'ylabel': 'average precision', 'title': 'Detecting Defects Performance'}
+    ax = axes[0]
+    line_plot(ax, x, ys, labels, param_dict=param_dict)
+    ax.grid(linestyle='--')
+
+    # draw_f1_score
+    x, ys, labels = data['uid'], [data['f1-score']], ['F1-score']
+    param_dict = {'xlabel': 'score_threshold', 'ylabel': 'F1-score', 'title': 'Finding Defects Performance'}
+    ax = axes[1]
+    line_plot(ax, x, ys, labels, param_dict=param_dict)
+    ax.grid(linestyle='--')
+
+    # draw_average_test_time
+    x, ys = data['uid'], [data['att'], data['att_normal'], data['att_defective']]
+    labels = ['att', 'att_normal', 'att_defective']
+    param_dict = {'xlabel': 'score_threshold', 'ylabel': 'average test time(ms)', 'title': 'Test Speed Performance'}
+    ax = axes[2]
+    line_plot(ax, x, ys, labels, param_dict=param_dict)
+    ax.grid(linestyle='--')
+
+    plt.subplots_adjust(left=0.05, right=0.97)
+    save_plt(save_name)
+    plt.show()
+
+
+def main():
+    # make_figure3()
+
+    # make figure 4
+    make_evaluation_figure(
+        '../../work_dirs/bottle/one_model_cascade_rcnn_r50_fpn_1x/one_model_cascade_rcnn_r50_fpn_1x_score_threshold_test.json',
+        './figures/Evaluation_on_different_score_thr_one_model.jpg'
+    )
+
+
 if __name__ == "__main__":
-    make_figures()
+    main()
