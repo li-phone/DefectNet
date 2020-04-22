@@ -6,8 +6,7 @@ import os
 from tqdm import tqdm
 import torch.nn as nn
 from torch.autograd import Variable
-from torchnet import meter
-from sklearn.metrics.classification import classification_report
+from sklearn.metrics import classification_report
 from torch.utils.data import *
 from .build_network import *
 from .utils import *
@@ -173,6 +172,7 @@ def main(cfg):
 
 
 if __name__ == '__main__':
-    pcfg = import_module("cfg.py")
-    dcfg = import_module(pcfg.dataset_cfg_path)
-    main(dcfg)
+    # pcfg = import_module("cfg.py")
+    # dcfg = import_module(pcfg.dataset_cfg_path)
+    # main(dcfg)
+    pass

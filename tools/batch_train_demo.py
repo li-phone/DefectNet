@@ -7,6 +7,24 @@ from mmcv.runner.runner import Runner
 def train_models():
     from batch_train import BatchTrain
 
+    # # To make Table 2.
+    # # train for one-model method without background
+    from onecla.batch_train import main as first_model_train
+    first_model_train()
+
+    # # To make Table 2.
+    # # train for one-model method without background
+    # BatchTrain(cfg_path='../configs/bottle/one_model_cascade_rcnn_r50_fpn_1x.py',
+    #            data_mode='test', train_sleep_time=0, test_sleep_time=60).common_train()
+    #
+    # # train for one-model method with background
+    # BatchTrain(cfg_path='../configs/bottle/one_model_bg_cascade_rcnn_r50_fpn_1x.py',
+    #            data_mode='test', train_sleep_time=0, test_sleep_time=60).common_train()
+
+    # To make Figure 4.
+    # BatchTrain(cfg_path='../configs/bottle/one_model_cascade_rcnn_r50_fpn_1x.py',
+    #            data_mode='test', train_sleep_time=0, test_sleep_time=3).score_threshold_test()
+
     # To make Table 4.
     # train for exponent defect finding network loss weight
     # BatchTrain(cfg_path='../configs/bottle/defectnet_exponent_cascade_rcnn_r50_fpn_1x.py',

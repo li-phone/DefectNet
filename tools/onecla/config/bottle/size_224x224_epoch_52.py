@@ -7,38 +7,38 @@ model_config = dict(
 )
 
 # split data settings
-data_name = 'coco_alcohol'
-data_root = "/home/liphone/undone-work/data/detection/alcohol"
-img_save_dir = data_root + "/imgs/"
+data_name = 'bottle'
+data_root = "../work_dirs/data/bottle"
+# img_save_dir = data_root + "/imgs/"
 
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 dataset = dict(
-    raw_train_path=data_root + '/annotations/instance_train_alcohol.csv',
-    raw_test_path=data_root + '/annotations/instance_train_alcohol.csv',
-    balance=False,
+    # raw_train_path=data_root + '/annotations/instance_train_alcohol.csv',
+    # raw_test_path=data_root + '/annotations/instance_train_alcohol.csv',
+    # balance=False,
     train=dict(
         name='train',
-        ann_file=data_root + '/annotations/instance_train_alcohol.csv',
+        ann_file=data_root + '/annotations/cls_train.csv',
         img_prefix=data_root + '/trainval/',
-        img_scale=(1333, 800),
-        keep_ratio=True,
+        img_scale=(224, 224),
+        keep_ratio=False,
         img_norm_cfg=img_norm_cfg,
     ),
-    val=dict(
-        name='val',
-        ann_file=data_root + '/annotations/instance_train_alcohol.csv',
-        img_prefix=data_root + '/trainval/',
-        img_scale=(1333, 800),
-        keep_ratio=True,
-        img_norm_cfg=img_norm_cfg,
-    ),
+    # val=dict(
+    #     name='val',
+    #     ann_file=data_root + '/annotations/cls_val.csv',
+    #     img_prefix=data_root + '/trainval/',
+    #     img_scale=(224, 224),
+    #     keep_ratio=False,
+    #     img_norm_cfg=img_norm_cfg,
+    # ),
     test=dict(
         name='test',
-        ann_file=data_root + '/annotations/instance_test_alcohol.csv',
+        ann_file=data_root + '/annotations/cls_test.csv',
         img_prefix=data_root + '/trainval/',
-        img_scale=(1333, 800),
-        keep_ratio=True,
+        img_scale=(224, 224),
+        keep_ratio=False,
         img_norm_cfg=img_norm_cfg,
     ),
 )
@@ -50,10 +50,10 @@ log = dict(
 )
 
 # train process settings
-train_mode = ['train', ]
-val_mode = ['val', 'test']
+train_mode = ['train']
+val_mode = ['test']
 total_epochs = 13 * 4
-work_dir = './work_dirs/' + data_name + '/' + model_config['name']
+work_dir = '../work_dirs/' + data_name + '/' + model_config['name'] + '/size_224x224_epoch_52'
 resume_from = work_dir + '/latest.pth'
 load_from = None
 mix = dict(
@@ -78,7 +78,7 @@ loss = dict(
 )
 freq_cfg = dict(
     checkpoint_save=1,
-    log_print=20,
+    log_print=10,
 )
 gpus = '0'
 data_loader = dict(

@@ -3,44 +3,17 @@ from .utils import *
 import os
 
 
-def batch_train_with_size_224x224():
-    loss_types = ['CrossEntropyLoss', ]
-    for type in loss_types:
-        cfg = import_module('config/coco_alcohol,size=224x224.py')
-        cfg.gpus = '1'
-        cfg.loss['type'] = type
-        cfg.work_dir = os.path.join(cfg.work_dir,
-                                    'coco_alcohol,loss={},seed=666,size=224x224'.format(type))
-        cfg.resume_from = cfg.work_dir + '/latest.pth'
-        train_main(cfg)
-
-
-def batch_train_with_size_max_1333x800():
-    loss_types = ['CrossEntropyLoss', ]
-    for type in loss_types:
-        cfg = import_module('onecla/config/coco_alcohol,size=max(1333x800).py')
-        cfg.gpus = '1'
-        cfg.loss['type'] = type
-        cfg.work_dir = os.path.join(cfg.work_dir, 'coco_alcohol,loss={},seed=666,size=max(1333x800)'.format(type))
-        cfg.resume_from = cfg.work_dir + '/latest.pth'
-        train_main(cfg)
-
-
-def batch_train_with_garbage_dataset():
-    loss_types = ['CrossEntropyLoss', ]
-    for type in loss_types:
-        cfg = import_module('onecla/config/coco_garbage,size=224x224.py')
-        cfg.gpus = '1'
-        cfg.loss['type'] = type
-        cfg.work_dir = os.path.join(cfg.work_dir, 'coco_garbage,loss={},seed=666,size=224x224'.format(type))
-        cfg.resume_from = cfg.work_dir + '/latest.pth'
-        train_main(cfg)
+def batch_train(cfg, gpus='1'):
+    cfg = import_module(cfg)
+    cfg.gpus = gpus
+    train_main(cfg)
 
 
 def main():
-    batch_train_with_garbage_dataset()
-    # batch_train_with_size_max_1333x800()
-    # batch_train_with_size_224x224()
+    batch_train('onecla/config/bottle/size_224x224_epoch_12.py')
+    batch_train('onecla/config/bottle/size_1333x800_epoch_12.py')
+    batch_train('onecla/config/bottle/size_224x224_epoch_52.py')
+    batch_train('onecla/config/bottle/size_1333x800_epoch_52.py')
 
 
 if __name__ == '__main__':
