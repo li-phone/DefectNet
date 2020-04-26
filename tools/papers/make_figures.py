@@ -165,7 +165,7 @@ def make_evaluation_figure(data_path, save_name, ap_param, f1_score_param, att_p
 
 
 def main():
-    # make_figure3()
+    make_figure3()
 
     # make figure 4
     ap_param = {'xlabel': 'score_threshold', 'ylabel': 'average precision', 'title': 'Detecting Defects Performance'}
