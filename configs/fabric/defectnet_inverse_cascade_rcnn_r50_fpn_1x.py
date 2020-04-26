@@ -3,13 +3,20 @@ model = dict(
     type='CascadeRCNN',
     num_stages=3,
     pretrained='torchvision://resnet50',
+    # defect finding network parameters
+    dfn_balance=dict(type='inverse', scale_factor=1.0, init_weight=1.0, background_id=1),
+    # category_ids for not training, start from 1
+    ignore_ids=[1],
     backbone=dict(
         type='ResNet',
         depth=50,
         num_stages=4,
         out_indices=(0, 1, 2, 3),
         frozen_stages=1,
-        style='pytorch'),
+        style='pytorch',
+        num_classes=2,
+        loss_cls=dict(
+            type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0)),
     neck=dict(
         type='FPN',
         in_channels=[256, 512, 1024, 2048],
@@ -39,7 +46,7 @@ model = dict(
             in_channels=256,
             fc_out_channels=1024,
             roi_feat_size=7,
-            num_classes=12,
+            num_classes=35,
             target_means=[0., 0., 0., 0.],
             target_stds=[0.1, 0.1, 0.2, 0.2],
             reg_class_agnostic=True,
@@ -52,7 +59,7 @@ model = dict(
             in_channels=256,
             fc_out_channels=1024,
             roi_feat_size=7,
-            num_classes=12,
+            num_classes=35,
             target_means=[0., 0., 0., 0.],
             target_stds=[0.05, 0.05, 0.1, 0.1],
             reg_class_agnostic=True,
@@ -65,7 +72,7 @@ model = dict(
             in_channels=256,
             fc_out_channels=1024,
             roi_feat_size=7,
-            num_classes=12,
+            num_classes=35,
             target_means=[0., 0., 0., 0.],
             target_stds=[0.033, 0.033, 0.067, 0.067],
             reg_class_agnostic=True,
@@ -158,7 +165,7 @@ test_cfg = dict(
         score_thr=0.05, nms=dict(type='nms', iou_thr=0.5), max_per_img=100))
 # dataset settings
 dataset_type = 'CocoDataset'
-data_root = '/home/liphone/undone-work/data/detection/alcohol'
+data_root = '../work_dirs/data/fabric'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
@@ -191,22 +198,18 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + '/annotations/instance_train_alcohol.json',
+        ann_file=data_root + '/annotations/train.json',
         img_prefix=data_root + '/trainval/',
-        ignore_ids=[1],
         pipeline=train_pipeline),
-    val=dict(
-        type=dataset_type,
-        ann_file=data_root + '/annotations/instance_train_alcohol.json',
-        img_prefix=data_root + '/trainval/',
-        pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + '/annotations/instance_test_alcohol.json',
+        ann_file=data_root + '/annotations/test.json',
         img_prefix=data_root + '/trainval/',
+        # category_ids for not coco_eval, start from 0
+        ignore_ids=[0],
         pipeline=test_pipeline))
 # optimizer
-optimizer = dict(type='SGD', lr=0.02, momentum=0.9, weight_decay=0.0001)
+optimizer = dict(type='SGD', lr=0.02 / 8, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 # learning policy
 lr_config = dict(
@@ -215,7 +218,7 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=1.0 / 3,
     step=[8, 11])
-checkpoint_config = dict(interval=1)
+checkpoint_config = dict(interval=6)
 # yapf:disable
 log_config = dict(
     interval=50,
@@ -225,14 +228,12 @@ log_config = dict(
     ])
 # yapf:enable
 # runtime settings
-dataset_name = 'alcohol'
+dataset_name = 'fabric'
 first_model_cfg = None
 total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-uid = None
-cfg_name = ''
-work_dir = '../work_dirs/' + dataset_name + '/cascade_rcnn_r50_fpn_1x/' + cfg_name
+work_dir = '../work_dirs/' + dataset_name + '/defectnet_inverse_cascade_rcnn_r50_fpn_1x'
 resume_from = None
-load_from = None
+load_from = '../work_dirs/pretrained/cascade_rcnn_r50_fpn_1x_20190501-3b6211ab.pth'
 workflow = [('train', 1)]
