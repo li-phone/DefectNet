@@ -164,6 +164,34 @@ def make_evaluation_figure(data_path, save_name, ap_param, f1_score_param, att_p
     plt.show()
 
 
+def count_data(fmt, data_names):
+    def count(ann_file, name):
+        coco = COCO(ann_file)
+        defect_nums = np.empty(0, dtype=int)
+        for image in coco.dataset['images']:
+            cnt = 0
+            annIds = coco.getAnnIds(imgIds=image['id'])
+            anns = coco.loadAnns(annIds)
+            for ann in anns:
+                if ann['category_id'] != 0:
+                    cnt += 1
+            defect_nums = np.append(defect_nums, cnt)
+        normal_shape = np.where(defect_nums == 0)[0]
+        all_cnt, normal_cnt = len(coco.dataset['images']), normal_shape.shape[0]
+        defect_cnt = defect_nums.shape[0] - normal_shape.shape[0]
+        return dict(name=name, all=all_cnt, normal=normal_cnt, defect=defect_cnt, prop=normal_cnt / all_cnt)
+
+    from pycocotools.coco import COCO
+    results = []
+    for data_name in data_names:
+        train_file = fmt.format(data_name) + 'train.json'
+        test_file = fmt.format(data_name) + 'test.json'
+        results.append(count(train_file, data_name + '_train'))
+        results.append(count(test_file, data_name + '_test'))
+    results = json_normalize(results)
+    print(results)
+
+
 def main():
     make_figure3()
 
@@ -186,6 +214,8 @@ def main():
         './figures/Evaluation_on_increasing_loss_weight.jpg',
         ap_param, f1_score_param, att_param
     )
+
+    count_data('../../work_dirs/data/bottle/annotations', ['bottle', 'fabric'])
 
 
 if __name__ == "__main__":
