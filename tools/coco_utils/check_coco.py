@@ -77,6 +77,11 @@ def main():
         '../../work_dirs/data/bottle/annotations/checked_annotations.json',
     )
 
+    check_coco(
+        '../../work_dirs/data/fabric/annotations/annotations.json',
+        '../../work_dirs/data/fabric/annotations/checked_annotations.json',
+    )
+
 
 if __name__ == '__main__':
     main()

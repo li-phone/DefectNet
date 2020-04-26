@@ -40,6 +40,10 @@ def main():
     save_dir = '../../work_dirs/data/bottle/annotations'
     split_coco(ann_path, save_dir, rate=0.8)
 
+    ann_path = '../../work_dirs/data/fabric/annotations/checked_annotations.json'
+    save_dir = '../../work_dirs/data/fabric/annotations'
+    split_coco(ann_path, save_dir, rate=0.8)
+
 
 if __name__ == '__main__':
     main()

@@ -53,3 +53,12 @@ if __name__ == '__main__':
         '../../work_dirs/data/bottle/annotations/test.json',
         '../../work_dirs/data/bottle/annotations/cls_test.csv'
     )
+
+    coco_defect2csv(
+        '../../work_dirs/data/fabric/annotations/train.json',
+        '../../work_dirs/data/fabric/annotations/cls_train.csv'
+    )
+    coco_defect2csv(
+        '../../work_dirs/data/fabric/annotations/test.json',
+        '../../work_dirs/data/fabric/annotations/cls_test.csv'
+    )
