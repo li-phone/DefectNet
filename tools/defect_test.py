@@ -312,7 +312,7 @@ def main(**kwargs):
 
     # have first model?
     first_model = None
-    if cfg.first_model_cfg is not None:
+    if 'first_model_cfg' in cfg._cfg_dict and cfg.first_model_cfg is not None:
         first_code_py = import_module(cfg.first_code_py)
         first_model = first_code_py.Inference(cfg.first_model_cfg, cfg.first_model_path)
 
