@@ -3,6 +3,8 @@
 #include <cmath>
 #include <vector>
 
+#define AT_CHECK TORCH_CHECK
+
 int ROIPoolForwardLaucher(const at::Tensor features, const at::Tensor rois,
                           const float spatial_scale, const int channels,
                           const int height, const int width, const int num_rois,

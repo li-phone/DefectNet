@@ -5,6 +5,8 @@
 #include <cmath>
 #include <vector>
 
+#define AT_CHECK TORCH_CHECK
+
 int ROIAlignForwardLaucher(const at::Tensor features, const at::Tensor rois,
                            const float spatial_scale, const int sample_num,
                            const int channels, const int height,

@@ -3,6 +3,8 @@
 #include <cmath>
 #include <vector>
 
+#define AT_CHECK TORCH_CHECK
+
 int MaskedIm2colForwardLaucher(const at::Tensor im, const int height,
                                const int width, const int channels,
                                const int kernel_h, const int kernel_w,
