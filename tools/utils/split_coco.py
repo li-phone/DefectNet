@@ -20,7 +20,7 @@ def get_coco_by_imgids(coco, img_ids):
     return instance_coco
 
 
-def split_coco(ann_path, save_dir, rate=0.8, random_state=666):
+def split_coco(ann_path, save_dir, rate=0.8, prefix='instance_', random_state=666):
     coco = COCO(ann_path)
     image_ids = coco.getImgIds()
     random.seed(random_state)
@@ -31,18 +31,25 @@ def split_coco(ann_path, save_dir, rate=0.8, random_state=666):
     test_ids = image_ids[train_size:]
     train_set = get_coco_by_imgids(coco, train_ids)
     test_set = get_coco_by_imgids(coco, test_ids)
-    save_dict(os.path.join(save_dir, 'train.json'), train_set)
-    save_dict(os.path.join(save_dir, 'test.json'), test_set)
+    save_dict(os.path.join(save_dir, '{}train.json'.format(prefix)), train_set)
+    save_dict(os.path.join(save_dir, '{}test.json'.format(prefix)), test_set)
+
+
+def parse_args():
+    import argparse
+    parser = argparse.ArgumentParser(description='Check ann_file')
+    parser.add_argument('ann_file', help='annotation file or test image directory')
+    parser.add_argument('save_dir', help='save_dir')
+    parser.add_argument('--rate', type=float, default=0.8, help='split rate')
+    parser.add_argument('--prefix', default='instance_', help='save prefix')
+    parser.add_argument('--random_state', type=int, default=666, help='random_state')
+    args = parser.parse_args()
+    return args
 
 
 def main():
-    ann_path = '../../work_dirs/data/bottle/annotations/checked_annotations.json'
-    save_dir = '../../work_dirs/data/bottle/annotations'
-    split_coco(ann_path, save_dir, rate=0.8)
-
-    ann_path = '../../work_dirs/data/fabric/annotations/checked_annotations.json'
-    save_dir = '../../work_dirs/data/fabric/annotations'
-    split_coco(ann_path, save_dir, rate=0.8)
+    args = parse_args()
+    split_coco(args.ann_file, args.save_dir, args.rate, args.prefix, args.random_state)
 
 
 if __name__ == '__main__':

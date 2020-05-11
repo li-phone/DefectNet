@@ -16,7 +16,7 @@ joblib==0.14.1
 kiwisolver==1.2.0
 matplotlib==3.2.1
 mmcv==0.5.1
--e git+git@gitee.com:liphone/DefectNet.git@2194cc71ed54b1f75f500716f86f765c7b99f556#egg=mmdet
+-e git+git@gitee.com:liphone/DefectNet.git@57d7c2b95426b02409478084ac80ee48a73310c3#egg=mmdet
 networkx==2.4
 numpy==1.18.4
 opencv-python==4.2.0.34

@@ -198,12 +198,12 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + '/annotations/train.json',
+        ann_file=data_root + '/annotations/instance_train.json',
         img_prefix=data_root + '/trainval/',
         pipeline=train_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + '/annotations/test.json',
+        ann_file=data_root + '/annotations/instance_test.json',
         img_prefix=data_root + '/trainval/',
         # category_ids for not coco_eval, start from 0
         ignore_ids=[0],

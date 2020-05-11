@@ -1,6 +1,10 @@
 import os
 import json
-from pandas import json_normalize
+
+try:
+    from pandas import json_normalize
+except:
+    from pandas.io.json import json_normalize
 
 
 def load_dict(fname):
@@ -71,16 +75,18 @@ def check_coco(src, dst, replace=True):
     print('Done!')
 
 
-def main():
-    check_coco(
-        '../../work_dirs/data/bottle/annotations/annotations.json',
-        '../../work_dirs/data/bottle/annotations/checked_annotations.json',
-    )
+def parse_args():
+    import argparse
+    parser = argparse.ArgumentParser(description='Check ann_file')
+    parser.add_argument('ann_file', help='annotation file or test image directory')
+    parser.add_argument('save_name', help='save_name')
+    args = parser.parse_args()
+    return args
 
-    check_coco(
-        '../../work_dirs/data/fabric/annotations/annotations.json',
-        '../../work_dirs/data/fabric/annotations/checked_annotations.json',
-    )
+
+def main():
+    args = parse_args()
+    check_coco(args.ann_file, args.save_name)
 
 
 if __name__ == '__main__':

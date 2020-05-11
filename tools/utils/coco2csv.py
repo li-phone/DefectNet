@@ -44,21 +44,19 @@ def coco_defect2csv(ann_path, save_name):
     data.to_csv(save_name, index=False)
 
 
-if __name__ == '__main__':
-    coco_defect2csv(
-        '../../work_dirs/data/bottle/annotations/train.json',
-        '../../work_dirs/data/bottle/annotations/cls_train.csv'
-    )
-    coco_defect2csv(
-        '../../work_dirs/data/bottle/annotations/test.json',
-        '../../work_dirs/data/bottle/annotations/cls_test.csv'
-    )
+def parse_args():
+    import argparse
+    parser = argparse.ArgumentParser(description='Check ann_file')
+    parser.add_argument('ann_file', help='coco annotation file')
+    parser.add_argument('save_name', help='save_name for defect csv file')
+    args = parser.parse_args()
+    return args
 
-    coco_defect2csv(
-        '../../work_dirs/data/fabric/annotations/train.json',
-        '../../work_dirs/data/fabric/annotations/cls_train.csv'
-    )
-    coco_defect2csv(
-        '../../work_dirs/data/fabric/annotations/test.json',
-        '../../work_dirs/data/fabric/annotations/cls_test.csv'
-    )
+
+def main():
+    args = parse_args()
+    coco_defect2csv(args.ann_file, args.save_name)
+
+
+if __name__ == '__main__':
+    main()
