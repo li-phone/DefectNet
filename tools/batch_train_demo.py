@@ -77,7 +77,7 @@ def train_fabric_models(test_status=-10):
 def main():
     train_models()
     train_fabric_models()
-    test_models()
+    # test_models()
     pass
 
 

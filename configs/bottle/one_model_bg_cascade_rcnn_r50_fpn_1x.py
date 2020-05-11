@@ -228,5 +228,5 @@ dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = '../work_dirs/' + dataset_name + '/one_model_bg_cascade_rcnn_r50_fpn_1x'
 resume_from = None
-load_from = '../work_dirs/pretrained/cascade_rcnn_r50_fpn_1x_20190501-3b6211ab.pth'
+load_from = '../work_dirs/pretrained/cascade_rcnn_r50_fpn_1x_coco_20200316-3dc56deb.pth'
 workflow = [('train', 1)]
