@@ -75,6 +75,11 @@ def train_fabric_models(test_status=-10):
 
 
 def main():
+    # train variable loss weight of Defect Net method
+    # train for exponent defect finding network loss weight
+    BatchTrain(cfg_path='../configs/fabric/defectnet_exponent_cascade_rcnn_r50_fpn_1x.py',
+               data_mode='test', train_sleep_time=0, test_sleep_time=-1).common_train()
+
     train_models()
     train_fabric_models()
     # test_models()

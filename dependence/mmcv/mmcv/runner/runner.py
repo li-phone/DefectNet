@@ -274,6 +274,9 @@ class Runner(object):
         self.mode = 'train'
         self.data_loader = data_loader
 
+        # add epoch hyper paramter
+        kwargs['epoch'] = self._epoch
+
         self.call_hook('before_train_epoch')
         for i, data_batch in enumerate(data_loader):
             self._inner_iter = i

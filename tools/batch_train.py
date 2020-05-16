@@ -27,7 +27,7 @@ class BatchTrain(object):
     def find_best_constant_loss_weight(self):
         # To make Figure 5. The evaluation performance with increasing loss weight w.
         cfgs = []
-        for weight in np.linspace(0, 2, 41):
+        for weight in np.linspace(0, 2, 11):
             cfg = mmcv.Config.fromfile(self.cfg_path)
             cfg.model['dfn_balance']['init_weight'] = weight
 
