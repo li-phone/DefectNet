@@ -15,8 +15,6 @@ imgaug==0.2.6
 joblib==0.14.1
 kiwisolver==1.2.0
 matplotlib==3.2.1
-mmcv==0.5.1
--e git+git@gitee.com:liphone/DefectNet.git@513e4e531951a0500ff7b960a2e7e42759886445#egg=mmdet
 networkx==2.4
 numpy==1.18.4
 opencv-python==4.2.0.34
@@ -25,7 +23,6 @@ packaging==20.3
 pandas==1.0.3
 Pillow==7.1.2
 pooch==1.1.0
-pycocotools==2.0.0
 pyparsing==2.4.7
 python-dateutil==2.8.1
 pytz==2020.1
