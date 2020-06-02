@@ -27,7 +27,7 @@ class BatchTrain(object):
     def find_best_constant_loss_weight(self):
         # To make Figure 5. The evaluation performance with increasing loss weight w.
         cfgs = []
-        for weight in np.linspace(0, 2, 11):
+        for weight in np.linspace(0, 2, 41):
             cfg = mmcv.Config.fromfile(self.cfg_path)
             cfg.model['dfn_balance']['init_weight'] = weight
 
@@ -141,7 +141,7 @@ class BatchTrain(object):
             return normal_ids, defect_ids
 
         def make_proportion_json(ann_file, proportion, save_name, random_state=666):
-            from coco_utils.split_coco import get_coco_by_imgids
+            from utils.split_coco import get_coco_by_imgids
             import pandas as pd
             coco = COCO(ann_file)
             normal_ids, defect_ids = cls_dataset(coco)

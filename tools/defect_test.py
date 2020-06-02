@@ -68,7 +68,7 @@ def single_gpu_test(model, data_loader, show=False, first_model=None):
     return results, result_times
 
 
-def have_defect(anns, images, threshold=0.05, background_id=0):
+def have_defect(anns, images, threshold=0., background_id=0):
     assert background_id == 0
     if isinstance(anns, str):
         with open(anns) as fp:

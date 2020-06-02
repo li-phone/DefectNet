@@ -184,8 +184,8 @@ def count_data(fmt, data_names):
     from pycocotools.coco import COCO
     results = []
     for data_name in data_names:
-        train_file = fmt.format(data_name) + 'train.json'
-        test_file = fmt.format(data_name) + 'test.json'
+        train_file = fmt.format(data_name) + 'instance_train.json'
+        test_file = fmt.format(data_name) + 'instance_test.json'
         results.append(count(train_file, data_name + '_train'))
         results.append(count(test_file, data_name + '_test'))
     results = json_normalize(results)
@@ -200,7 +200,7 @@ def main():
     f1_score_param = {'xlabel': 'score_threshold', 'ylabel': 'F1-score', 'title': 'Finding Defects Performance'}
     att_param = {'xlabel': 'score_threshold', 'ylabel': 'average test time(ms)', 'title': 'Test Speed Performance'}
     make_evaluation_figure(
-        '../../work_dirs/bottle/one_model_cascade_rcnn_r50_fpn_1x/one_model_cascade_rcnn_r50_fpn_1x_score_threshold_test.json',
+        '../../../work_dirs/bottle/one_model_cascade_rcnn_r50_fpn_1x/one_model_cascade_rcnn_r50_fpn_1x_score_threshold_test.json',
         './figures/Evaluation_on_different_score_thr_one_model.jpg',
         ap_param, f1_score_param, att_param
     )
@@ -210,12 +210,12 @@ def main():
     f1_score_param = {'xlabel': 'w', 'ylabel': 'F1-score', 'title': 'Finding Defects Performance'}
     att_param = {'xlabel': 'w', 'ylabel': 'average test time(ms)', 'title': 'Test Speed Performance'}
     make_evaluation_figure(
-        '../../work_dirs/bottle/defectnet_constant_cascade_rcnn_r50_fpn_1x/const_weight=0.00/defectnet_constant_cascade_rcnn_r50_fpn_1x_find_best_weight_test.json',
+        '../../../work_dirs/bottle/defectnet_constant_cascade_rcnn_r50_fpn_1x/const_weight=0.00/defectnet_constant_cascade_rcnn_r50_fpn_1x_find_best_weight_test.json',
         './figures/Evaluation_on_increasing_loss_weight.jpg',
         ap_param, f1_score_param, att_param
     )
 
-    count_data('../../work_dirs/data/bottle/annotations', ['bottle', 'fabric'])
+    count_data('../../../work_dirs/data/{}/annotations/', ['bottle', 'fabric'])
 
 
 if __name__ == "__main__":
