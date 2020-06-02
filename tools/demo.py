@@ -16,8 +16,8 @@ def train_models(test_status=-10):
 
     # train constant loss weight of Defect Net method
     # train for finding best constant defect finding network loss weight
-    BatchTrain(cfg_path='../configs/bottle/defectnet_constant_cascade_rcnn_r50_fpn_1x.py',
-               data_mode='test', train_sleep_time=0, test_sleep_time=test_status).find_best_constant_loss_weight()
+    # BatchTrain(cfg_path='../configs/bottle/defectnet_constant_cascade_rcnn_r50_fpn_1x.py',
+    #            data_mode='test', train_sleep_time=0, test_sleep_time=test_status).find_best_constant_loss_weight()
 
     # train variable loss weight of Defect Net method
     # train for exponent defect finding network loss weight
@@ -36,16 +36,16 @@ def train_models(test_status=-10):
 
 def test_models(test_status=-10):
     # test different score threshold of one-model method without background
-    one_model = BatchTrain(cfg_path='../configs/bottle/one_model_cascade_rcnn_r50_fpn_1x.py',
-                           data_mode='test', train_sleep_time=0, test_sleep_time=test_status)
-    one_model.score_threshold_test()
+    # one_model = BatchTrain(cfg_path='../configs/bottle/one_model_cascade_rcnn_r50_fpn_1x.py',
+    #                        data_mode='test', train_sleep_time=0, test_sleep_time=test_status)
+    # one_model.score_threshold_test()
 
     # test two-model method using one-model method without background as second model
     # one_model.two_model_test()
 
     # test different normal images proportion for inverse defect finding network loss weight
-    # BatchTrain(cfg_path='../configs/bottle/defectnet_inverse_cascade_rcnn_r50_fpn_1x.py',
-    #            data_mode='test', train_sleep_time=0, test_sleep_time=test_status).normal_proportion_test()
+    BatchTrain(cfg_path='../configs/bottle/defectnet_inverse_cascade_rcnn_r50_fpn_1x.py',
+               data_mode='test', train_sleep_time=0, test_sleep_time=test_status).normal_proportion_test()
 
 
 #
@@ -78,9 +78,9 @@ def test_models(test_status=-10):
 
 
 def main():
-    train_models(60*2)
+    # train_models(60 * 3)
     # train_fabric_models(10)
-    # test_models(60*3)
+    test_models(60*3)
     pass
 
 

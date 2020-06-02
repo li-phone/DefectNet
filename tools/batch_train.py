@@ -141,7 +141,7 @@ class BatchTrain(object):
             return normal_ids, defect_ids
 
         def make_proportion_json(ann_file, proportion, save_name, random_state=666):
-            from utils.split_coco import get_coco_by_imgids
+            from extends.cocoutils.coco_split import get_coco_by_imgids
             import pandas as pd
             coco = COCO(ann_file)
             normal_ids, defect_ids = cls_dataset(coco)
@@ -151,35 +151,37 @@ class BatchTrain(object):
             if proportion <= prop:
                 # increase normal images
                 a = proportion * len(defect_ids) / (1 - proportion)
-                keep_normal_ids = normal_id_df.sample(n=int(a), random_state=random_state)
-                defect_ids.extend(list(keep_normal_ids['id']))
+                normal_id_df = normal_id_df.sample(n=int(a), random_state=random_state)
+                defect_ids.extend(list(normal_id_df['id']))
                 dataset = get_coco_by_imgids(coco, defect_ids)
             else:
                 # decrease defective images
                 b = len(normal_ids) / proportion - len(normal_ids)
-                keep_defect_ids = defect_id_df.sample(n=int(b), random_state=random_state)
-                normal_ids.extend(list(keep_defect_ids['id']))
+                defect_id_df = defect_id_df.sample(n=int(b), random_state=random_state)
+                normal_ids.extend(list(defect_id_df['id']))
                 dataset = get_coco_by_imgids(coco, normal_ids)
             with open(save_name, 'w')as fp:
                 json.dump(dataset, fp)
+            return len(normal_id_df), len(defect_id_df)
 
         cfgs, json_out_heads = [], []
         for proportion in np.linspace(0., 1., 101):
             cfg = mmcv.Config.fromfile(self.cfg_path)
             ann_file = os.path.join(cfg.work_dir, 'proportion/normal_proportion={:.2f}_test.json'.format(proportion))
-            if not os.path.exists(ann_file):
+            prop_cnt = [None, None]
+            if True or not os.path.exists(ann_file):
                 ann_file = ann_file.replace('\\', '/')
                 save_dir = ann_file[:ann_file.rfind('/')]
                 if not os.path.exists(save_dir):
                     os.makedirs(save_dir)
                 # try to keep as many images as possible in keeping proportion
-                make_proportion_json(cfg.data['test']['ann_file'], proportion, ann_file)
+                prop_cnt = make_proportion_json(cfg.data['test']['ann_file'], proportion, ann_file)
             cfg.data['test']['ann_file'] = ann_file
 
             json_out_head = 'proportion={:.2f}'.format(proportion)
             json_out_heads.append(json_out_head)
 
-            cfg.uid = 'proportion={}'.format(proportion)
+            cfg.uid = 'proportion={}, normal_cnt={}, defect_cnt={}'.format(proportion, prop_cnt[0], prop_cnt[1])
 
             cfg.resume_from = os.path.join(cfg.work_dir, 'latest.pth')
             if not os.path.exists(cfg.resume_from):
