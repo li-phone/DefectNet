@@ -73,7 +73,7 @@ def read_json(json_path):
             r = json.loads(line)
             d = r['data']
             if isinstance(r['uid'], str):
-                x_label = float(r['uid'].split('=')[1])
+                x_label = float(r['uid'].split(',')[0].split('=')[1])
             elif isinstance(r['uid'], float):
                 x_label = r['uid']
             elif isinstance(r['uid'], int):
@@ -87,7 +87,7 @@ def read_json(json_path):
                 result[k] = v
             for k1, v1 in d['defect_result'].items():
                 if isinstance(v1, list):
-                    result[k1] = np.mean(v1)
+                    result[k1] = np.mean(v1) * 1000
                 elif isinstance(v1, dict):
                     for k2, v2 in v1['macro avg'].items():
                         result[k2] = v2
@@ -212,6 +212,16 @@ def main():
     make_evaluation_figure(
         '../../../work_dirs/bottle/defectnet_constant_cascade_rcnn_r50_fpn_1x/const_weight=0.00/defectnet_constant_cascade_rcnn_r50_fpn_1x_find_best_weight_test.json',
         './figures/Evaluation_on_increasing_loss_weight.jpg',
+        ap_param, f1_score_param, att_param
+    )
+
+    # make figure 6
+    ap_param = {'xlabel': 'normal_proportion', 'ylabel': 'average precision', 'title': 'Detecting Defects Performance'}
+    f1_score_param = {'xlabel': 'normal_proportion', 'ylabel': 'F1-score', 'title': 'Finding Defects Performance'}
+    att_param = {'xlabel': 'normal_proportion', 'ylabel': 'average test time(ms)', 'title': 'Test Speed Performance'}
+    make_evaluation_figure(
+        '../../../work_dirs/bottle/defectnet_inverse_cascade_rcnn_r50_fpn_1x/defectnet_inverse_cascade_rcnn_r50_fpn_1x_normal_proportion_test.json',
+        './figures/Evaluation_on_normal_proportion_test.jpg',
         ap_param, f1_score_param, att_param
     )
 
