@@ -50,37 +50,37 @@ def test_models(test_status=-10):
 
 #
 #
-# def train_fabric_models(test_status=-10):
-#     # train for one-model method without background
-#     BatchTrain(cfg_path='../configs/fabric/one_model_cascade_rcnn_r50_fpn_1x.py',
-#                data_mode='test', train_sleep_time=0, test_sleep_time=test_status).common_train()
-#
-#     # train first model of two-model method
-#     first_model_train(dataset_name='fabric')
-#
-#     # train constant loss weight of Defect Net method
-#     # train for finding best constant defect finding network loss weight
-#     BatchTrain(cfg_path='../configs/fabric/defectnet_constant_cascade_rcnn_r50_fpn_1x.py',
-#                data_mode='test', train_sleep_time=0, test_sleep_time=test_status).common_train()
-#
-#     # train variable loss weight of Defect Net method
-#     # train for exponent defect finding network loss weight
-#     BatchTrain(cfg_path='../configs/fabric/defectnet_exponent_cascade_rcnn_r50_fpn_1x.py',
-#                data_mode='test', train_sleep_time=0, test_sleep_time=test_status).common_train()
-#
-#     # train for inverse defect finding network loss weight
-#     BatchTrain(cfg_path='../configs/fabric/defectnet_inverse_cascade_rcnn_r50_fpn_1x.py',
-#                data_mode='test', train_sleep_time=0, test_sleep_time=test_status).common_train()
-#
-#     # train for linear defect finding network loss weight
-#     BatchTrain(cfg_path='../configs/fabric/defectnet_linear_cascade_rcnn_r50_fpn_1x.py',
-#                data_mode='test', train_sleep_time=0, test_sleep_time=test_status).common_train()
+def train_fabric_models(test_status=-10):
+    # train for one-model method without background
+    # BatchTrain(cfg_path='../configs/fabric/one_model_cascade_rcnn_r50_fpn_1x.py',
+    #            data_mode='test', train_sleep_time=0, test_sleep_time=test_status).common_train()
+
+    # train first model of two-model method
+    # first_model_train(dataset_name='fabric')
+    #
+    # # train constant loss weight of Defect Net method
+    # # train for finding best constant defect finding network loss weight
+    BatchTrain(cfg_path='../configs/fabric/defectnet_constant_cascade_rcnn_r50_fpn_1x.py',
+               data_mode='test', train_sleep_time=0, test_sleep_time=test_status).common_train()
+
+    # # train variable loss weight of Defect Net method
+    # # train for exponent defect finding network loss weight
+    # BatchTrain(cfg_path='../configs/fabric/defectnet_exponent_cascade_rcnn_r50_fpn_1x.py',
+    #            data_mode='test', train_sleep_time=0, test_sleep_time=test_status).common_train()
+
+    # # train for inverse defect finding network loss weight
+    # BatchTrain(cfg_path='../configs/fabric/defectnet_inverse_cascade_rcnn_r50_fpn_1x.py',
+    #            data_mode='test', train_sleep_time=0, test_sleep_time=test_status).common_train()
+
+    # # train for linear defect finding network loss weight
+    # BatchTrain(cfg_path='../configs/fabric/defectnet_linear_cascade_rcnn_r50_fpn_1x.py',
+    #            data_mode='test', train_sleep_time=0, test_sleep_time=test_status).common_train()
 
 
 def main():
     # train_models(60 * 3)
     # train_fabric_models(10)
-    test_models(60*3)
+    # test_models(60*3)
     pass
 
 
