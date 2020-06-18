@@ -52,8 +52,8 @@ def test_models(test_status=-10):
 #
 def train_fabric_models(test_status=-10):
     # train for one-model method without background
-    # BatchTrain(cfg_path='../configs/fabric/one_model_cascade_rcnn_r50_fpn_1x.py',
-    #            data_mode='test', train_sleep_time=0, test_sleep_time=test_status).common_train()
+    BatchTrain(cfg_path='../configs/fabric/one_model_cascade_rcnn_r50_fpn_1x.py',
+               data_mode='test', train_sleep_time=0, test_sleep_time=test_status).common_train()
 
     # train first model of two-model method
     # first_model_train(dataset_name='fabric')
@@ -79,7 +79,7 @@ def train_fabric_models(test_status=-10):
 
 def main():
     # train_models(60 * 3)
-    # train_fabric_models(10)
+    train_fabric_models(60 * 5)
     # test_models(60*3)
     pass
 
