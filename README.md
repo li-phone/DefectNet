@@ -1,3 +1,5 @@
+# DefectNet
+DefectNet: Towards Fast and Efficient Defects Detection
 
 # MMDetection
 
