@@ -169,9 +169,9 @@ def draw_avg_infer_time_and_efficient():
 
 
 def main():
-    cfg_dir = '../config_alcohol/cascade_rcnn_r50_fpn_1x'
+    cfg_dir = '../config_fabric/cascade_rcnn_r50_fpn_1x'
     rst_dir = '../results/imgs'
-    data_root = '/home/liphone/undone-work/data/detection/alcohol'
+    data_root = '/home/liphone/undone-work/data/detection/fabric'
 
     # one model
     draw_figure(
@@ -184,8 +184,8 @@ def main():
 
     # defect network
     count_data(data_root + '/annotations/instances_train_20191223_annotations.json', 'all')
-    count_data(data_root + '/annotations/instance_train_alcohol.json', 'train')
-    count_data(data_root + '/annotations/instance_test_alcohol.json', 'test')
+    count_data(data_root + '/annotations/instance_train_fabric.json', 'train')
+    count_data(data_root + '/annotations/instance_test_fabric.json', 'test')
 
     # draw_figure(
     #     json_path=cfg_dir + '/different_dfn_weight,background=No,.json',

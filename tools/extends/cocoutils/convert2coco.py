@@ -15,73 +15,73 @@ except:
     from pandas.io.json import json_normalize
 
 
-def fabric2coco():
-    ann_file = '/home/liphone/undone-work/data/detection/fabric/annotations/anno_train_20190818-20190928.json'
-    save_ann_name = '/home/liphone/undone-work/data/detection/fabric/annotations/instance_train,type=34,.json'
-    img_dir = '/home/liphone/undone-work/data/detection/fabric/trainval'
-    with open(ann_file) as fp:
-        ann_json = json.load(fp)
-    normal_images = glob.glob(os.path.join(img_dir, 'normal_Images_*.jpg'))
-    bbox = [0, 0, 32, 32]
-    for p in normal_images:
-        ann_json.append(dict(name=os.path.basename(p), defect_name='背景', bbox=bbox))
-    label2cat = {
-        '背景': 0, '破洞': 1, '水渍': 2, '油渍': 3, '污渍': 4, '三丝': 5, '结头': 6, '花板跳': 7, '百脚': 8, '毛粒': 9,
-        '粗经': 10, '松经': 11, '断经': 12, '吊经': 13, '粗维': 14, '纬缩': 15, '浆斑': 16, '整经结': 17, '星跳': 18, '跳花': 19,
-        '断氨纶': 20, '稀密档': 21, '浪纹档': 22, '色差档': 23, '磨痕': 24, '轧痕': 25, '修痕': 26, '烧毛痕': 27, '死皱': 28, '云织': 29,
-        '双纬': 30, '双经': 31, '跳纱': 32, '筘路': 33, '纬纱不良': 34,
-    }
-    defect_name2label = {
-        '背景': 0, '破洞': 1, '水渍': 2, '油渍': 2, '污渍': 2, '三丝': 3, '结头': 4, '花板跳': 5, '百脚': 6, '毛粒': 7,
-        '粗经': 8, '松经': 9, '断经': 10, '吊经': 11, '粗维': 12, '纬缩': 13, '浆斑': 14, '整经结': 15, '星跳': 16, '跳花': 16,
-        '断氨纶': 17, '稀密档': 18, '浪纹档': 18, '色差档': 18, '磨痕': 19, '轧痕': 19, '修痕': 19, '烧毛痕': 19, '死皱': 20, '云织': 20,
-        '双纬': 20, '双经': 20, '跳纱': 20, '筘路': 20, '纬纱不良': 20,
-    }
-    # name2label_20 = {
-    #     '背景': 0, '破洞': 1, '水渍_油渍_污渍': 2, '三丝': 3, '结头': 4, '花板跳': 5, '百脚': 6, '毛粒': 7,
-    #     '粗经': 8, '松经': 9, '断经': 10, '吊经': 11, '粗维': 12, '纬缩': 13, '浆斑': 14, '整经结': 15, '星跳_跳花': 16,
-    #     '断氨纶': 17, '稀密档_浪纹档_色差档': 18, '磨痕_轧痕_修痕_烧毛痕': 19,
-    #     '死皱_云织_双纬_双经_跳纱_筘路_纬纱不良': 20,
-    # }
-    # transform2coco(ann_json, save_ann_name, label2cat)
-    cn2eng = {
-        '背景': 'background', '破洞': 'hole', '水渍': 'water stain', '油渍': 'oil stain',
-        '污渍': 'soiled', '三丝': 'three silk', '结头': 'knots', '花板跳': 'card skip', '百脚': 'mispick',
-        '毛粒': 'card neps', '粗经': 'coarse end', '松经': 'loose warp', '断经': 'cracked ends',
-        '吊经': 'buttonhold selvage', '粗维': 'coarse picks', '纬缩': 'looped weft', '浆斑': 'hard size',
-        '整经结': 'warping knot', '星跳': 'stitch', '跳花': 'skips',
-        '断氨纶': 'broken spandex', '稀密档': 'thin thick place', '浪纹档': 'buckling place', '色差档': 'color shading',
-        '磨痕': 'smash', '轧痕': 'roll marks', '修痕': 'take marks', '烧毛痕': 'singeing', '死皱': 'crinked',
-        '云织': 'uneven weaving', '双纬': 'double pick', '双经': 'double end', '跳纱': 'felter', '筘路': 'reediness',
-        '纬纱不良': 'bad weft yarn',
-    }
-    label_list = [v for k, v in cn2eng.items()]
-    from draw_util import draw_coco
-    draw_coco(
-        save_ann_name, img_dir, '/home/liphone/undone-work/data/detection/fabric/.instance_train,type=34,', label_list
-    )
-
-
-def underwater2coco():
-    data_root = 'E:/liphone/data/images/detections/underwater'
-
-    save_name = data_root + '/annotations/underwater_train.json'
-    img_dir = data_root + '/train/image'
-    if not os.path.exists(save_name):
-        xml_dir = data_root + '/train/box'
-        anns = xml2list(xml_dir, img_dir)
-        transform2coco(anns, save_name, img_dir=img_dir, bgcat={'id': 0, 'name': 'waterweeds'})
-
-    test_name = data_root + '/annotations/underwater_testB.json'
-    if not os.path.exists(test_name):
-        test_img_dir = data_root + '/test-B-image'
-        imgdir2coco(save_name, test_name, test_img_dir)
-
-    # from draw_util import draw_coco
-    # draw_coco(
-    #     save_name, img_dir, data_root + '/train/.aquatic'
-    # )
-
+# def fabric2coco():
+#     ann_file = '/home/liphone/undone-work/data/detection/fabric/annotations/anno_train_20190818-20190928.json'
+#     save_ann_name = '/home/liphone/undone-work/data/detection/fabric/annotations/instance_train,type=34,.json'
+#     img_dir = '/home/liphone/undone-work/data/detection/fabric/trainval'
+#     with open(ann_file) as fp:
+#         ann_json = json.load(fp)
+#     normal_images = glob.glob(os.path.join(img_dir, 'normal_Images_*.jpg'))
+#     bbox = [0, 0, 32, 32]
+#     for p in normal_images:
+#         ann_json.append(dict(name=os.path.basename(p), defect_name='背景', bbox=bbox))
+#     label2cat = {
+#         '背景': 0, '破洞': 1, '水渍': 2, '油渍': 3, '污渍': 4, '三丝': 5, '结头': 6, '花板跳': 7, '百脚': 8, '毛粒': 9,
+#         '粗经': 10, '松经': 11, '断经': 12, '吊经': 13, '粗维': 14, '纬缩': 15, '浆斑': 16, '整经结': 17, '星跳': 18, '跳花': 19,
+#         '断氨纶': 20, '稀密档': 21, '浪纹档': 22, '色差档': 23, '磨痕': 24, '轧痕': 25, '修痕': 26, '烧毛痕': 27, '死皱': 28, '云织': 29,
+#         '双纬': 30, '双经': 31, '跳纱': 32, '筘路': 33, '纬纱不良': 34,
+#     }
+#     defect_name2label = {
+#         '背景': 0, '破洞': 1, '水渍': 2, '油渍': 2, '污渍': 2, '三丝': 3, '结头': 4, '花板跳': 5, '百脚': 6, '毛粒': 7,
+#         '粗经': 8, '松经': 9, '断经': 10, '吊经': 11, '粗维': 12, '纬缩': 13, '浆斑': 14, '整经结': 15, '星跳': 16, '跳花': 16,
+#         '断氨纶': 17, '稀密档': 18, '浪纹档': 18, '色差档': 18, '磨痕': 19, '轧痕': 19, '修痕': 19, '烧毛痕': 19, '死皱': 20, '云织': 20,
+#         '双纬': 20, '双经': 20, '跳纱': 20, '筘路': 20, '纬纱不良': 20,
+#     }
+#     # name2label_20 = {
+#     #     '背景': 0, '破洞': 1, '水渍_油渍_污渍': 2, '三丝': 3, '结头': 4, '花板跳': 5, '百脚': 6, '毛粒': 7,
+#     #     '粗经': 8, '松经': 9, '断经': 10, '吊经': 11, '粗维': 12, '纬缩': 13, '浆斑': 14, '整经结': 15, '星跳_跳花': 16,
+#     #     '断氨纶': 17, '稀密档_浪纹档_色差档': 18, '磨痕_轧痕_修痕_烧毛痕': 19,
+#     #     '死皱_云织_双纬_双经_跳纱_筘路_纬纱不良': 20,
+#     # }
+#     # transform2coco(ann_json, save_ann_name, label2cat)
+#     cn2eng = {
+#         '背景': 'background', '破洞': 'hole', '水渍': 'water stain', '油渍': 'oil stain',
+#         '污渍': 'soiled', '三丝': 'three silk', '结头': 'knots', '花板跳': 'card skip', '百脚': 'mispick',
+#         '毛粒': 'card neps', '粗经': 'coarse end', '松经': 'loose warp', '断经': 'cracked ends',
+#         '吊经': 'buttonhold selvage', '粗维': 'coarse picks', '纬缩': 'looped weft', '浆斑': 'hard size',
+#         '整经结': 'warping knot', '星跳': 'stitch', '跳花': 'skips',
+#         '断氨纶': 'broken spandex', '稀密档': 'thin thick place', '浪纹档': 'buckling place', '色差档': 'color shading',
+#         '磨痕': 'smash', '轧痕': 'roll marks', '修痕': 'take marks', '烧毛痕': 'singeing', '死皱': 'crinked',
+#         '云织': 'uneven weaving', '双纬': 'double pick', '双经': 'double end', '跳纱': 'felter', '筘路': 'reediness',
+#         '纬纱不良': 'bad weft yarn',
+#     }
+#     label_list = [v for k, v in cn2eng.items()]
+#     from draw_util import draw_coco
+#     draw_coco(
+#         save_ann_name, img_dir, '/home/liphone/undone-work/data/detection/fabric/.instance_train,type=34,', label_list
+#     )
+#
+#
+# def underwater2coco():
+#     data_root = 'E:/liphone/data/images/detections/underwater'
+#
+#     save_name = data_root + '/annotations/underwater_train.json'
+#     img_dir = data_root + '/train/image'
+#     if not os.path.exists(save_name):
+#         xml_dir = data_root + '/train/box'
+#         anns = xml2list(xml_dir, img_dir)
+#         transform2coco(anns, save_name, img_dir=img_dir, bgcat={'id': 0, 'name': 'waterweeds'})
+#
+#     test_name = data_root + '/annotations/underwater_testB.json'
+#     if not os.path.exists(test_name):
+#         test_img_dir = data_root + '/test-B-image'
+#         imgdir2coco(save_name, test_name, test_img_dir)
+#
+#     # from draw_util import draw_coco
+#     # draw_coco(
+#     #     save_name, img_dir, data_root + '/train/.aquatic'
+#     # )
+#
 
 # def main():
 #     underwater2coco()

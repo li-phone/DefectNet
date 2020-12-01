@@ -38,8 +38,10 @@ def split_coco(ann_path, save_dir, rate=0.8, prefix='instance_', random_state=66
 def parse_args():
     import argparse
     parser = argparse.ArgumentParser(description='Check ann_file')
-    parser.add_argument('ann_file', help='annotation file or test image directory')
-    parser.add_argument('save_dir', help='save_dir')
+    parser.add_argument('ann_file', help='annotation file or test image directory',
+                        default='/home/lifeng/data/detection/fabric/annotations/instance_all.json')
+    parser.add_argument('save_dir', help='save_dir',
+                        default='/home/lifeng/data/detection/fabric/annotations/')
     parser.add_argument('--rate', type=float, default=0.8, help='split rate')
     parser.add_argument('--prefix', default='instance_', help='save prefix')
     parser.add_argument('--random_state', type=int, default=666, help='random_state')

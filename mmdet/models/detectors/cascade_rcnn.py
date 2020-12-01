@@ -150,7 +150,7 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
             x = self.extract_feat(img)
         elif self.dfn_weight == 0:
             x, x2 = self.extract_defect_feat(img)
-            if self.with_neck:
+            if x2 == 0 and self.with_neck:
                 x = self.neck(x)
         else:
             x, x2 = self.extract_defect_feat(img)
@@ -186,15 +186,16 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
     def get_dfn_weight(self, n=None):
         k = self.dfn_balance.scale_factor
         w0 = self.dfn_balance.init_weight
+        T = self.dfn_balance.period
         if self.dfn_balance.type == 'constant':
             return w0
         elif self.dfn_balance.type == 'linear':
-            return -k * n + w0
+            return -k * (n / T) + w0
         elif self.dfn_balance.type == 'inverse':
-            return k * w0 / (n + 1)
+            return k * w0 / ((n / T) + 1)
         elif self.dfn_balance.type == 'exponent':
             a = self.dfn_balance.base
-            return k * w0 / (a ** n)
+            return k * w0 / (max(a ** (n / T), 1e-6))
         else:
             raise Exception('No {} implement'.format(str(self.dfn_balance.type)))
 
@@ -206,7 +207,8 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
                       gt_bboxes_ignore=None,
                       gt_masks=None,
                       proposals=None,
-                      epoch=None):
+                      epoch=None,
+                      **kwargs):
         """
         Args:
             img (Tensor): of shape (N, C, H, W) encoding input images.
@@ -286,10 +288,12 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
 
                 # if have no any images, then set all loss to be 0 except dfn loss
                 if len(gt_labels) == 0 or len(gt_bboxes) == 0 or img.shape[0] == 0:
-                    loss_zero = torch.Tensor([0]).float().cuda()
-                    loss_one = torch.Tensor([1]).float().cuda()
-                    losses.update(loss_rpn_cls=loss_zero, loss_rpn_bbox=loss_zero)
+                    loss_zeros = [torch.Tensor([0.]).float().cuda() for i in range(len(x))]
+                    loss_ones = [torch.Tensor([1.]).float().cuda() for i in range(len(x))]
+                    losses.update(loss_rpn_cls=loss_zeros, loss_rpn_bbox=loss_zeros)
                     for i in range(self.num_stages):
+                        loss_zero = torch.Tensor([0.]).float().cuda()
+                        loss_one = torch.Tensor([1.]).float().cuda()
                         for name in {'loss_cls', 'loss_bbox'}:
                             losses['s{}.{}'.format(i, name)] = loss_zero
                         for name in {'acc'}:
@@ -428,7 +432,7 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
             x = self.extract_feat(img)
         elif self.dfn_balance.init_weight == 0:
             x, x2 = self.extract_defect_feat(img)
-            if self.with_neck:
+            if x2 == 0 and self.with_neck:
                 x = self.neck(x)
         else:
             x, x2 = self.extract_defect_feat(img)

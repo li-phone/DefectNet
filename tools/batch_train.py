@@ -35,7 +35,7 @@ class BatchTrain(object):
             cfg.cfg_name = 'const_weight={:.2f}'.format(cfg.uid)
             cfg.work_dir = os.path.join(cfg.work_dir, cfg.cfg_name)
 
-            cfg.resume_from = os.path.join(cfg.work_dir, 'latest.pth')
+            cfg.resume_from = os.path.join(cfg.work_dir, 'epoch_12.pth')
             if not os.path.exists(cfg.resume_from):
                 cfg.resume_from = None
             cfgs.append(cfg)
@@ -49,7 +49,7 @@ class BatchTrain(object):
         cfg.first_model_cfg = None
         cfg.cfg_name = str(self.cfg_name)
         cfg.uid = str(self.cfg_name)
-        cfg.resume_from = os.path.join(cfg.work_dir, 'latest.pth')
+        cfg.resume_from = os.path.join(cfg.work_dir, 'epoch_12.pth')
         if not os.path.exists(cfg.resume_from):
             cfg.resume_from = None
 
@@ -71,7 +71,7 @@ class BatchTrain(object):
 
             cfg.uid = 'score_thr={}'.format(score)
 
-            cfg.resume_from = os.path.join(cfg.work_dir, 'latest.pth')
+            cfg.resume_from = os.path.join(cfg.work_dir, 'epoch_12.pth')
             if not os.path.exists(cfg.resume_from):
                 cfg.resume_from = None
             cfgs.append(cfg)
@@ -80,20 +80,20 @@ class BatchTrain(object):
         if self.test_sleep_time >= 0:
             batch_test(cfgs, save_path, self.test_sleep_time, mode=self.data_mode, json_out_heads=json_out_heads)
 
-    def two_model_test(self):
+    def two_model_test(self, data_type="fabric"):
 
         # watch train effects using different base cfg
         first_model_cfg = [
-            'onecla/config/bottle/size_224x224_epoch_12.py',
-            'onecla/config/bottle/size_224x224_epoch_52.py',
-            'onecla/config/bottle/size_1333x800_epoch_12.py',
-            'onecla/config/bottle/size_1333x800_epoch_52.py',
+            'onecla/config/{}/size_224x224_epoch_12.py'.format(data_type),
+            'onecla/config/{}/size_224x224_epoch_52.py'.format(data_type),
+            'onecla/config/{}/size_1333x800_epoch_12.py'.format(data_type),
+            'onecla/config/{}/size_1333x800_epoch_52.py'.format(data_type),
         ]
         first_model_path = [
-            '../work_dirs/bottle/resnet50/size_224x224_epoch_12/epoch_000011.pth',
-            '../work_dirs/bottle/resnet50/size_224x224_epoch_52/epoch_000051.pth',
-            '../work_dirs/bottle/resnet50/size_1333x800_epoch_12/epoch_000011.pth',
-            '../work_dirs/bottle/resnet50/size_1333x800_epoch_52/epoch_000051.pth',
+            '../work_dirs/{}/resnet50/size_224x224_epoch_12/epoch_000011.pth'.format(data_type),
+            '../work_dirs/{}/resnet50/size_224x224_epoch_52/epoch_000051.pth'.format(data_type),
+            '../work_dirs/{}/resnet50/size_1333x800_epoch_12/epoch_000011.pth'.format(data_type),
+            '../work_dirs/{}/resnet50/size_1333x800_epoch_52/epoch_000051.pth'.format(data_type),
         ]
         first_code_py = 'onecla/infer.py'
 
@@ -183,7 +183,7 @@ class BatchTrain(object):
 
             cfg.uid = 'proportion={}, normal_cnt={}, defect_cnt={}'.format(proportion, prop_cnt[0], prop_cnt[1])
 
-            cfg.resume_from = os.path.join(cfg.work_dir, 'latest.pth')
+            cfg.resume_from = os.path.join(cfg.work_dir, 'epoch_12.pth')
             if not os.path.exists(cfg.resume_from):
                 cfg.resume_from = None
             cfgs.append(cfg)

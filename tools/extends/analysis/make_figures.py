@@ -200,7 +200,7 @@ def main():
     f1_score_param = {'xlabel': 'score_threshold', 'ylabel': 'F1-score', 'title': 'Finding Defects Performance'}
     att_param = {'xlabel': 'score_threshold', 'ylabel': 'average test time(ms)', 'title': 'Test Speed Performance'}
     make_evaluation_figure(
-        '../../../work_dirs/bottle/one_model_cascade_rcnn_r50_fpn_1x/one_model_cascade_rcnn_r50_fpn_1x_score_threshold_test.json',
+        '../../../work_dirs/fabric/one_model_cascade_rcnn_r50_fpn_1x/one_model_cascade_rcnn_r50_fpn_1x_score_threshold_test.json',
         './figures/Evaluation_on_different_score_thr_one_model.jpg',
         ap_param, f1_score_param, att_param
     )
@@ -210,7 +210,7 @@ def main():
     f1_score_param = {'xlabel': 'w', 'ylabel': 'F1-score', 'title': 'Finding Defects Performance'}
     att_param = {'xlabel': 'w', 'ylabel': 'average test time(ms)', 'title': 'Test Speed Performance'}
     make_evaluation_figure(
-        '../../../work_dirs/bottle/defectnet_constant_cascade_rcnn_r50_fpn_1x/const_weight=0.00/defectnet_constant_cascade_rcnn_r50_fpn_1x_find_best_weight_test.json',
+        '../../../work_dirs/fabric/defectnet_constant_cascade_rcnn_r50_fpn_1x/const_weight=0.00/defectnet_constant_cascade_rcnn_r50_fpn_1x_find_best_weight_test.json',
         './figures/Evaluation_on_increasing_loss_weight.jpg',
         ap_param, f1_score_param, att_param
     )
@@ -220,12 +220,12 @@ def main():
     f1_score_param = {'xlabel': 'normal_proportion', 'ylabel': 'F1-score', 'title': 'Finding Defects Performance'}
     att_param = {'xlabel': 'normal_proportion', 'ylabel': 'average test time(ms)', 'title': 'Test Speed Performance'}
     make_evaluation_figure(
-        '../../../work_dirs/bottle/defectnet_inverse_cascade_rcnn_r50_fpn_1x/defectnet_inverse_cascade_rcnn_r50_fpn_1x_normal_proportion_test.json',
+        '../../../work_dirs/fabric/defectnet_inverse_cascade_rcnn_r50_fpn_1x/defectnet_inverse_cascade_rcnn_r50_fpn_1x_normal_proportion_test.json',
         './figures/Evaluation_on_normal_proportion_test.jpg',
         ap_param, f1_score_param, att_param
     )
 
-    count_data('../../../work_dirs/data/{}/annotations/', ['bottle', 'fabric'])
+    # count_data('../../../work_dirs/data/{}/annotations/', ['fabric', 'fabric'])
 
 
 if __name__ == "__main__":

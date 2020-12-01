@@ -23,7 +23,7 @@ def get_parameter_number(net):
 
 def main():
     m = torch.load(
-        '../../../work_dirs/bottle/defectnet_inverse_cascade_rcnn_r50_fpn_1x/epoch_12.pth')
+        '../../../work_dirs/fabric/defectnet_inverse_cascade_rcnn_r50_fpn_1x/epoch_12.pth')
     print(get_parameter_number(m['state_dict']))
 
 

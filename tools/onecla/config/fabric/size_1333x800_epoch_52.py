@@ -8,7 +8,7 @@ model_config = dict(
 
 # split data settings
 data_name = 'fabric'
-data_root = "../work_dirs/data/fabric"
+data_root = "data/fabric"
 # img_save_dir = data_root + "/imgs/"
 
 img_norm_cfg = dict(

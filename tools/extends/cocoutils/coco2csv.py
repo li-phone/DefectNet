@@ -47,8 +47,10 @@ def coco_defect2csv(ann_path, save_name):
 def parse_args():
     import argparse
     parser = argparse.ArgumentParser(description='Check ann_file')
-    parser.add_argument('ann_file', help='coco annotation file')
-    parser.add_argument('save_name', help='save_name for defect csv file')
+    parser.add_argument('ann_file', help='coco annotation file',
+                        default='/home/lifeng/undone-work/DefectNet/tools/data/fabric/annotations/instance_train.json')
+    parser.add_argument('save_name', help='save_name for defect csv file',
+                        default='/home/lifeng/undone-work/DefectNet/tools/data/fabric/annotations/cls_train.csv')
     args = parser.parse_args()
     return args
 
