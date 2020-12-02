@@ -48,9 +48,9 @@ def parse_args():
     import argparse
     parser = argparse.ArgumentParser(description='Check ann_file')
     parser.add_argument('ann_file', help='coco annotation file',
-                        default='/home/lifeng/undone-work/DefectNet/tools/data/fabric/annotations/instance_train.json')
+                        default='/home/lifeng/undone-work/DefectNet/tools/data/bottle/annotations/instance_test.json')
     parser.add_argument('save_name', help='save_name for defect csv file',
-                        default='/home/lifeng/undone-work/DefectNet/tools/data/fabric/annotations/cls_train.csv')
+                        default='/home/lifeng/undone-work/DefectNet/tools/data/bottle/annotations/cls_test.csv')
     args = parser.parse_args()
     return args
 

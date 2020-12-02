@@ -1,18 +1,39 @@
 # DefectNet
-DefectNet: Towards Fast and Efficient Defects Detection
+DefectNet: Towards Fast and Efficient Defects Detection.
 
-# MMDetection
+## Installation
 
-**News**: We released the technical report on [ArXiv](https://arxiv.org/abs/1906.07155).
+    git clone https://github.com/li-phone/DefectNet.git
+    cd DefectNet
+    pip install -r requirements.txt
+    bash setup.sh
+    
+## Prepare Dataset
 
-Documentation: https://mmdetection.readthedocs.io/
+1. Fabric defect dataset is available at: [https://pan.baidu.com/s/1RH0-hqGOWa-sgbAUdRQmGg](https://pan.baidu.com/s/1RH0-hqGOWa-sgbAUdRQmGg)，提取码：yd4b 
 
-## Introduction
 
-The master branch works with **PyTorch 1.1** or higher.
+|            | Total    | Normal   | Defective    | Normal Proportion |
+|------------|:--------:|:--------:|:------------:|:-----------------:|
+| all        | 8325     | 3663     | 4662         | 0.44              |
+| train      | 6660     | 2913     | 3747         | 0.44              | 
+| test       | 1665     | 750      | 915          | 0.45              |
 
-mmdetection is an open source object detection toolbox based on PyTorch. It is
-a part of the open-mmlab project developed by [Multimedia Laboratory, CUHK](http://mmlab.ie.cuhk.edu.hk/).
+2. Bottle defect dataset
+
+|            | Total    | Normal   | Defective    | Normal Proportion |
+|------------|:--------:|:--------:|:------------:|:-----------------:|
+| all        | 4516     | 1146     | 3370         | 0.25              |
+| train      | 3612     | 921      | 2691         | 0.25              | 
+| test       | 904      | 225      | 679          | 0.25              |
+
+## Train and Test
+
+    cd tools
+    python demo.py
+    # wait...
+    
+## Results
 
 ![demo image](demo/coco_test_12510.jpg)
 

@@ -8,7 +8,7 @@ model_config = dict(
 
 # split data settings
 data_name = 'bottle'
-data_root = "../work_dirs/data/bottle"
+data_root = "data/bottle"
 # img_save_dir = data_root + "/imgs/"
 
 img_norm_cfg = dict(

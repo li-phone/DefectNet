@@ -4,7 +4,7 @@ model = dict(
     num_stages=3,
     pretrained='torchvision://resnet50',
     # defect finding network parameters
-    dfn_balance=dict(type='linear', scale_factor=1.0 / 12, init_weight=1.0, background_id=1),
+    dfn_balance=dict(type='linear', period=1, scale_factor=1.0 / 12, init_weight=1.0, background_id=1),
     # category_ids for not training, start from 1
     ignore_ids=[1],
     backbone=dict(
@@ -165,7 +165,7 @@ test_cfg = dict(
         score_thr=0.05, nms=dict(type='nms', iou_thr=0.5), max_per_img=100))
 # dataset settings
 dataset_type = 'CocoDataset'
-data_root = '../work_dirs/data/bottle'
+data_root = 'data/bottle'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
