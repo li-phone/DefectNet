@@ -2,6 +2,8 @@
 DefectNet: Towards Fast and Efficient Defects Detection.
 
 ## Installation
+mirror: [https://gitee.com/liphone/DefectNet.git](https://gitee.com/liphone/DefectNet.git)
+
 
     git clone https://github.com/li-phone/DefectNet.git
     cd DefectNet
