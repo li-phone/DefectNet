@@ -10,8 +10,7 @@ DefectNet: Towards Fast and Efficient Defects Detection.
     
 ## Prepare Dataset
 
-1. Fabric defect dataset is available at: [https://pan.baidu.com/s/1RH0-hqGOWa-sgbAUdRQmGg](https://pan.baidu.com/s/1RH0-hqGOWa-sgbAUdRQmGg)，提取码：yd4b 
-
+- **Fabric defect dataset**
 
 |            | Total    | Normal   | Defective    | Normal Proportion |
 |------------|:--------:|:--------:|:------------:|:-----------------:|
@@ -19,43 +18,43 @@ DefectNet: Towards Fast and Efficient Defects Detection.
 | train      | 6660     | 2913     | 3747         | 0.44              | 
 | test       | 1665     | 750      | 915          | 0.45              |
 
-2. Bottle defect dataset
+- **Bottle defect dataset** is available at: [https://pan.baidu.com/s/1RH0-hqGOWa-sgbAUdRQmGg](https://pan.baidu.com/s/1RH0-hqGOWa-sgbAUdRQmGg)，提取码：yd4b 
 
 |            | Total    | Normal   | Defective    | Normal Proportion |
 |------------|:--------:|:--------:|:------------:|:-----------------:|
 | all        | 4516     | 1146     | 3370         | 0.25              |
 | train      | 3612     | 921      | 2691         | 0.25              | 
 | test       | 904      | 225      | 679          | 0.25              |
-
+    
 ## Train and Test
 
     cd tools
+    # ln -s {data directory} data 
     python demo.py
     # wait...
-    
+
 ## Results
 
-![demo image](demo/coco_test_12510.jpg)
+Test on GTX 2080Ti GPU: 
 
-### Major features
+- **Fabric defect dataset**
 
-- **Modular Design**
+| Model            | mAP    | F1-score   | ATT(MS)    | Remark |
+|------------|:--------:|:--------:|:------------:|:-----------------|
+|one-model         | 0.198 | 0.859 | 67.768         |cascade_rcnn_r50_fpn_1x|
+|two-model_small| 0.168 | 0.841 | **40.769**     |r50_e52+cascade_rcnn_r50_fpn_1x| 
+|two-model_large| 0.194 | 0.892 | 61.225     |r50_e12+cascade_rcnn_r50_fpn_1x| 
+|defectnet_const| **0.214** | **0.931** | 47.979     |defectnet_const+cascade_rcnn_r50_fpn_1x| 
+|defectnet_linear| 0.152 | 0.879 | 43.660    |defectnet_linear+cascade_rcnn_r50_fpn_1x| 
+|defectnet_inverse| 0.190 | 0.925 | 47.855     |defectnet_inverse+cascade_rcnn_r50_fpn_1x| 
+|defectnet_exponential| 0.191 | 0.926 | 47.500     |defectnet_exponential+cascade_rcnn_r50_fpn_1x| 
 
-  We decompose the detection framework into different components and one can easily construct a customized object detection framework by combining different modules.
+- **Bottle defect dataset**
 
-- **Support of multiple frameworks out of box**
-
-  The toolbox directly supports popular and contemporary detection frameworks, *e.g.* Faster RCNN, Mask RCNN, RetinaNet, etc.
-
-- **High efficiency**
-
-  All basic bbox and mask operations run on GPUs now. The training speed is faster than or comparable to other codebases, including [Detectron](https://github.com/facebookresearch/Detectron), [maskrcnn-benchmark](https://github.com/facebookresearch/maskrcnn-benchmark) and [SimpleDet](https://github.com/TuSimple/simpledet).
-
-- **State of the art**
-
-  The toolbox stems from the codebase developed by the *MMDet* team, who won [COCO Detection Challenge](http://cocodataset.org/#detection-leaderboard) in 2018, and we keep pushing it forward.
-
-Apart from MMDetection, we also released a library [mmcv](https://github.com/open-mmlab/mmcv) for computer vision research, which is heavily depended on by this toolbox.
+| Model            | mAP    | F1-score   | ATT(MS)    | Remark |
+|------------|:--------:|:--------:|:------------:|:-----------------|
+|one-model         | -- | -- | --         |cascade_rcnn_r50_fpn_1x|
+    
 
 ## License
 
@@ -63,87 +62,10 @@ This project is released under the [Apache 2.0 license](LICENSE).
 
 ## Changelog
 
-v1.0rc1 was released in 13/12/2019, with more than 20 bug fixes and 30 improvements and new features.
-Please refer to [CHANGELOG.md](docs/CHANGELOG.md) for details and history versions.
+None
 
-## Benchmark and model zoo
+## Reference
 
-Supported methods and backbones are shown in the below table.
-Results and models are available in the [Model zoo](docs/MODEL_ZOO.md).
+- **MMDetection**
 
-|                    | ResNet   | ResNeXt  | SENet    | VGG      | HRNet |
-|--------------------|:--------:|:--------:|:--------:|:--------:|:-----:|
-| RPN                | ✓        | ✓        | ☐        | ✗        | ✓     |
-| Fast R-CNN         | ✓        | ✓        | ☐        | ✗        | ✓     |
-| Faster R-CNN       | ✓        | ✓        | ☐        | ✗        | ✓     |
-| Mask R-CNN         | ✓        | ✓        | ☐        | ✗        | ✓     |
-| Cascade R-CNN      | ✓        | ✓        | ☐        | ✗        | ✓     |
-| Cascade Mask R-CNN | ✓        | ✓        | ☐        | ✗        | ✓     |
-| SSD                | ✗        | ✗        | ✗        | ✓        | ✗     |
-| RetinaNet          | ✓        | ✓        | ☐        | ✗        | ✓     |
-| GHM                | ✓        | ✓        | ☐        | ✗        | ✓     |
-| Mask Scoring R-CNN | ✓        | ✓        | ☐        | ✗        | ✓     |
-| Double-Head R-CNN  | ✓        | ✓        | ☐        | ✗        | ✓     |
-| Grid R-CNN (Plus)  | ✓        | ✓        | ☐        | ✗        | ✓     |
-| Hybrid Task Cascade| ✓        | ✓        | ☐        | ✗        | ✓     |
-| Libra R-CNN        | ✓        | ✓        | ☐        | ✗        | ✓     |
-| Guided Anchoring   | ✓        | ✓        | ☐        | ✗        | ✓     |
-| FCOS               | ✓        | ✓        | ☐        | ✗        | ✓     |
-| RepPoints          | ✓        | ✓        | ☐        | ✗        | ✓     |
-| Foveabox           | ✓        | ✓        | ☐        | ✗        | ✓     |
-| FreeAnchor         | ✓        | ✓        | ☐        | ✗        | ✓     |
-| NAS-FPN            | ✓        | ✓        | ☐        | ✗        | ✓     |
-
-Other features
-- [x] DCNv2
-- [x] Group Normalization
-- [x] Weight Standardization
-- [x] OHEM
-- [x] Soft-NMS
-- [x] Generalized Attention
-- [x] GCNet
-- [x] Mixed Precision (FP16) Training
-- [x] [InstaBoost](configs/instaboost/README.md)
-
-
-## Installation
-
-Please refer to [INSTALL.md](docs/INSTALL.md) for installation and dataset preparation.
-
-
-## Get Started
-
-Please see [GETTING_STARTED.md](docs/GETTING_STARTED.md) for the basic usage of MMDetection.
-
-## Contributing
-
-We appreciate all contributions to improve MMDetection. Please refer to [CONTRIBUTING.md](.github/CONTRIBUTING.md) for the contributing guideline.
-
-## Acknowledgement
-
-MMDetection is an open source project that is contributed by researchers and engineers from various colleges and companies. We appreciate all the contributors who implement their methods or add new features, as well as users who give valuable feedbacks.
-We wish that the toolbox and benchmark could serve the growing research community by providing a flexible toolkit to reimplement existing methods and develop their own new detectors.
-
-
-## Citation
-
-If you use this toolbox or benchmark in your research, please cite this project.
-
-```
-@article{mmdetection,
-  title   = {{MMDetection}: Open MMLab Detection Toolbox and Benchmark},
-  author  = {Chen, Kai and Wang, Jiaqi and Pang, Jiangmiao and Cao, Yuhang and
-             Xiong, Yu and Li, Xiaoxiao and Sun, Shuyang and Feng, Wansen and
-             Liu, Ziwei and Xu, Jiarui and Zhang, Zheng and Cheng, Dazhi and
-             Zhu, Chenchen and Cheng, Tianheng and Zhao, Qijie and Li, Buyu and
-             Lu, Xin and Zhu, Rui and Wu, Yue and Dai, Jifeng and Wang, Jingdong
-             and Shi, Jianping and Ouyang, Wanli and Loy, Chen Change and Lin, Dahua},
-  journal= {arXiv preprint arXiv:1906.07155},
-  year={2019}
-}
-```
-
-
-## Contact
-
-This repo is currently maintained by Kai Chen ([@hellock](http://github.com/hellock)), Yuhang Cao ([@yhcao6](https://github.com/yhcao6)), Wenwei Zhang ([@ZwwWayne](https://github.com/ZwwWayne)), Jiangmiao Pang ([@OceanPang](https://github.com/OceanPang)) and Jiaqi Wang ([@myownskyW7](https://github.com/myownskyW7)).
+    https://github.com/open-mmlab/mmdetection
