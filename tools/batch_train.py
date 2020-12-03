@@ -46,8 +46,11 @@ class BatchTrain(object):
         if self.test_sleep_time >= 0:
             batch_test(cfgs, save_path, self.test_sleep_time, mode=self.data_mode)
 
-    def common_train(self):
+    def common_train(self, **kwargs):
         cfg = mmcv.Config.fromfile(self.cfg_path)
+        if kwargs is not None and len(kwargs) != 0:
+            for k, v in dict(kwargs).items():
+                cfg.test_cfg[k] = v
         cfg.first_model_cfg = None
         cfg.cfg_name = str(self.cfg_name)
         cfg.uid = str(self.cfg_name)

@@ -12,7 +12,7 @@ def batch_train(cfgs, gpus='0'):
             train_main(cfg)
 
 
-def main1(dataset_name):
+def main(dataset_name):
     root = 'onecla/config/{}/'.format(dataset_name)
     paths = glob.glob(os.path.join(root, 'size_*_epoch_*.py'))
     cfgs = [root + os.path.basename(x) for x in paths]

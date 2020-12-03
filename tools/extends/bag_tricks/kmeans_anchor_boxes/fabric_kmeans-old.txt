@@ -1,0 +1,144 @@
+/home/liphone/anaconda3/envs/defectNet/bin/python /usr/local/bin/pycharm-2019.3.1/plugins/python/helpers/pydev/pydevd.py --multiproc --qt-support=auto --client 127.0.0.1 --port 40013 --file /home/liphone/undone-work/defectNet/DefectNet/utilities/tricks/kmeans_anchor_boxes/yolo_kmeans.py
+pydev debugger: process 4447 is connecting
+
+Connected to pydev debugger (build 193.6015.41)
+loading annotations into memory...
+  0%|          | 0/10 [00:00<?, ?it/s]Done (t=0.05s)
+creating index...
+index created!
+Accuracy: 46.53%
+Boxes:
+ [[32. 32.]]
+Ratios:
+ [1.0]
+loading annotations into memory...
+ 10%|█         | 1/10 [00:00<00:04,  2.13it/s]Done (t=0.02s)
+creating index...
+index created!
+Accuracy: 52.35%
+Boxes:
+ [[ 81.875 546.735]
+ [ 32.     32.   ]]
+Ratios:
+ [0.15, 1.0]
+loading annotations into memory...
+ 20%|██        | 2/10 [00:02<00:06,  1.19it/s]Done (t=0.02s)
+creating index...
+index created!
+Accuracy: 54.89%
+Boxes:
+ [[ 71.19  591.585]
+ [ 32.     32.   ]
+ [113.18   25.56 ]]
+Ratios:
+ [0.12, 1.0, 4.43]
+loading annotations into memory...
+ 30%|███       | 3/10 [00:05<00:11,  1.65s/it]Done (t=0.04s)
+creating index...
+index created!
+Accuracy: 63.30%
+Boxes:
+ [[  20.08    71.19 ]
+ [  32.      32.   ]
+ [1952.355  225.01 ]
+ [  40.16   854.33 ]]
+Ratios:
+ [0.05, 0.28, 1.0, 8.68]
+loading annotations into memory...
+ 40%|████      | 4/10 [00:07<00:10,  1.68s/it]Done (t=0.02s)
+creating index...
+index created!
+Accuracy: 65.54%
+Boxes:
+ [[  32.      32.   ]
+ [  38.425  873.255]
+ [2033.59   231.84 ]
+ [  20.08    71.19 ]
+ [ 113.18    25.56 ]]
+Ratios:
+ [0.04, 0.28, 1.0, 4.43, 8.77]
+loading annotations into memory...
+ 50%|█████     | 5/10 [00:12<00:13,  2.65s/it]Done (t=0.02s)
+creating index...
+index created!
+Accuracy: 66.71%
+Boxes:
+ [[2306.5    248.695]
+ [ 281.12   125.96 ]
+ [  32.      32.   ]
+ [  83.97    21.91 ]
+ [  20.08    71.19 ]
+ [  36.51   916.39 ]]
+Ratios:
+ [0.04, 0.28, 1.0, 2.23, 3.83, 9.27]
+loading annotations into memory...
+ 60%|██████    | 6/10 [00:15<00:11,  2.79s/it]Done (t=0.02s)
+creating index...
+index created!
+Accuracy: 69.05%
+Boxes:
+ [[  32.      32.   ]
+ [  40.16   909.965]
+ [  16.46    23.73 ]
+ [  20.08    62.07 ]
+ [  21.91   151.52 ]
+ [ 113.18    23.73 ]
+ [2038.045  230.665]]
+Ratios:
+ [0.04, 0.14, 0.32, 0.69, 1.0, 4.77, 8.84]
+loading annotations into memory...
+ 70%|███████   | 7/10 [00:20<00:10,  3.44s/it]Done (t=0.02s)
+creating index...
+index created!
+Accuracy: 70.03%
+Boxes:
+ [[  32.      32.   ]
+ [  18.25    51.11 ]
+ [  21.91   182.55 ]
+ [ 113.18    23.73 ]
+ [  40.16   925.41 ]
+ [  23.73    76.67 ]
+ [  17.45    21.91 ]
+ [2034.395  231.355]]
+Ratios:
+ [0.04, 0.12, 0.31, 0.36, 0.8, 1.0, 4.77, 8.79]
+loading annotations into memory...
+ 80%|████████  | 8/10 [00:24<00:07,  3.67s/it]Done (t=0.04s)
+creating index...
+index created!
+Accuracy: 71.56%
+Boxes:
+ [[  32.      32.   ]
+ [  34.68   954.73 ]
+ [  60.24    20.08 ]
+ [ 151.3    569.55 ]
+ [ 177.07    31.03 ]
+ [  21.91   151.52 ]
+ [  20.08    62.07 ]
+ [2280.94   223.075]
+ [  16.46    23.73 ]]
+Ratios:
+ [0.04, 0.14, 0.27, 0.32, 0.69, 1.0, 3.0, 5.71, 10.22]
+loading annotations into memory...
+ 90%|█████████ | 9/10 [00:28<00:03,  3.64s/it]Done (t=0.02s)
+creating index...
+index created!
+100%|██████████| 10/10 [00:31<00:00,  3.10s/it]
+Accuracy: 72.13%
+Boxes:
+ [[ 182.55   570.465]
+ [  34.68   985.76 ]
+ [  32.      32.   ]
+ [  21.91   151.52 ]
+ [  17.485   23.73 ]
+ [2256.3    215.41 ]
+ [  21.91    52.94 ]
+ [ 109.53    23.73 ]
+ [  34.68   457.84 ]
+ [  20.08    76.67 ]]
+Ratios:
+ [0.04, 0.08, 0.14, 0.26, 0.32, 0.41, 0.74, 1.0, 4.62, 10.47]
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+
+Process finished with exit code 0
