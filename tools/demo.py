@@ -1,5 +1,5 @@
 from batch_train import BatchTrain
-from onecla.batch_train import main1 as first_model_train
+from onecla.batch_train import main as first_model_train
 
 
 def models_test(test_status=60, data_type="fabric", only_two_model=None):
@@ -62,7 +62,7 @@ def main():
     # train bottle dataset
     models_train(data_type="bottle", const_weights=[0.15])
     # test bottle dataset
-    models_train(test_status=60 * 1, data_type="bottle")
+    models_train(test_status=60 * 1, data_type="bottle", const_weights=[0.15])
     models_test(test_status=60 * 1, data_type="bottle", only_two_model=True)
     pass
 
