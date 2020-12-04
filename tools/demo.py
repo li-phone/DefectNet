@@ -10,7 +10,7 @@ def models_test(test_status=60, data_type="fabric", only_two_model=None):
         one_model.score_threshold_test()
 
     # test two-model method using one-model method without background as second model
-    one_model.two_model_test()
+    one_model.two_model_test(data_type)
 
     # test different normal images proportion for inverse defect finding network loss weight
     if not only_two_model:
