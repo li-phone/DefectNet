@@ -63,6 +63,20 @@ Test on GTX 2080Ti GPU:
 |defectnet_inverse| 0.487 | **0.934** | 63.463     |defectnet_inverse+cascade_rcnn_r50_fpn_1x| 
 |defectnet_exponential| 0.486 | 0.930 | **62.860** |defectnet_exponential+cascade_rcnn_r50_fpn_1x| 
 
+Test on GTX 1080Ti GPU: 
+
+- **Bottle defect dataset**
+
+| Model            | mAP    | F1-score   | ATT(MS)    | Remark |
+|------------|:--------:|:--------:|:------------:|:-----------------|
+|one-model         |  0.490 |  0.870 |  81.186         |cascade_rcnn_r50_fpn_1x|
+|two-model_small|  0.483 |  0.872 | **65.079**     |r50_e52+cascade_rcnn_r50_fpn_1x| 
+|two-model_large| 0.485 |  0.917 | 94.617     |r50_e12+cascade_rcnn_r50_fpn_1x| 
+|defectnet_const| 0.491 |  0.938 |  65.646 |defectnet_const+cascade_rcnn_r50_fpn_1x| 
+|defectnet_linear|  0.471 |  0.926 | 68.651    |defectnet_linear+cascade_rcnn_r50_fpn_1x| 
+|defectnet_inverse| **0.495** | **0.942** |  67.850     |defectnet_inverse+cascade_rcnn_r50_fpn_1x| 
+|defectnet_exponential|  0.489 | 0.934 | 67.889 |defectnet_exponential+cascade_rcnn_r50_fpn_1x| 
+
 ## License
 
 This project is released under the [Apache 2.0 license](LICENSE).
