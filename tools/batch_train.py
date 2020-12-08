@@ -49,11 +49,11 @@ class BatchTrain(object):
     def common_train(self, **kwargs):
         cfg = mmcv.Config.fromfile(self.cfg_path)
         if kwargs is not None and len(kwargs) != 0:
-            for k, v in dict(kwargs).items():
+            for k, v in dict(kwargs['test_cfg']).items():
                 cfg.test_cfg[k] = v
         cfg.first_model_cfg = None
         cfg.cfg_name = str(self.cfg_name)
-        cfg.uid = str(self.cfg_name)
+        cfg.uid = str(self.cfg_name) if 'uid' not in kwargs else kwargs['uid']
         cfg.resume_from = os.path.join(cfg.work_dir, 'epoch_12.pth')
         if not os.path.exists(cfg.resume_from):
             cfg.resume_from = None
