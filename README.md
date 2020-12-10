@@ -1,5 +1,5 @@
 # DefectNet
-DefectNet: Towards Fast and Efficient Defect Detection.
+DefectNet: Towards Fast and Effective Defect Detection.
 
 ## Installation
 mirror: [https://gitee.com/liphone/DefectNet.git](https://gitee.com/liphone/DefectNet.git)
