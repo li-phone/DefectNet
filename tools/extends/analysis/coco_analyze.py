@@ -210,20 +210,16 @@ def parse_args():
 
 
 def main():
+    data_type = "bottle"
     data = COCOAnalysis(
         ann_files=[
-            '/home/lifeng/undone-work/DefectNet/tools/data/bottle/annotations/instance_all.json',
-            '/home/lifeng/undone-work/DefectNet/tools/data/bottle/annotations/instance_train.json',
-            '/home/lifeng/undone-work/DefectNet/tools/data/bottle/annotations/instance_test.json',
+            '/home/lifeng/undone-work/DefectNet/tools/data/{}/annotations/instance_all.json'.format(data_type),
+            '/home/lifeng/undone-work/DefectNet/tools/data/{}/annotations/instance_train.json'.format(data_type),
+            '/home/lifeng/undone-work/DefectNet/tools/data/{}/annotations/instance_test.json'.format(data_type),
         ],
-        save_img_dir='./results/bottle',
+        save_img_dir='./results/{}'.format(data_type),
         legends=['all', 'train', 'test'])
     data.summary()
-    # garbage_ana = COCOAnalysis(
-    #     ann_files=['/home/liphone/undone-work/data/detection/garbage/train/instance_train.json'],
-    #     save_img_dir='../results/garbage',
-    #     legends=['train'])
-    # garbage_ana.summary()
     pass
 
 

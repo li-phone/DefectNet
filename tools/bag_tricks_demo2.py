@@ -9,7 +9,7 @@ from onecla.batch_train import main as first_model_train
 def models_train(test_status=-10, data_type="fabric", const_weights=None):
     # train all models
     root = '../configs/{}/'.format(data_type)
-    paths = glob.glob(os.path.join(root, 'baseline_model_mst_value_*.py'))
+    paths = glob.glob(os.path.join(root, 'baseline_model_mst_range_*.py'))
     for cfg_path in paths:
         m = BatchTrain(cfg_path=cfg_path, data_mode='test', train_sleep_time=0, test_sleep_time=test_status)
         m.common_train()

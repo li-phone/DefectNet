@@ -164,7 +164,7 @@ img_norm_cfg = dict(
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True),
-    dict(type='Resize', img_scale=[(612, 1835), (250, 750)], keep_ratio=True, multiscale_mode='range'),
+    dict(type='Resize', img_scale=[(1223, 500), (1333, 800), (2446, 1000)], keep_ratio=True, multiscale_mode='value'),
     dict(type='RandomFlip', flip_ratio=0.5),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='Pad', size_divisor=32),
@@ -175,7 +175,7 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
-        img_scale=(1223, 500),
+        img_scale=(1333, 800),
         flip=False,
         transforms=[
             dict(type='Resize', keep_ratio=True),
@@ -228,7 +228,7 @@ first_model_cfg = None
 total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = '../work_dirs/' + dataset_name + '/baseline_model_mst_range_612x1835_250x750'
+work_dir = '../work_dirs/' + dataset_name + '/baseline_model_mst_value_1223x500_1333x800_2446x1000'
 resume_from = None
 load_from = '../work_dirs/pretrained/cascade_rcnn_r50_fpn_1x_coco_20200316-3dc56deb.pth'
 workflow = [('train', 1)]
