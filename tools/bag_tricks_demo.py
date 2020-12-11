@@ -9,10 +9,10 @@ from onecla.batch_train import main as first_model_train
 def models_train(test_status=-10, data_type="fabric", const_weights=None):
     # train all models
     root = '../configs/{}/'.format(data_type)
-    paths = glob.glob(os.path.join(root, 'baseline_model_mst_range_1223x2446_500x1000_k9.py'))
+    paths = glob.glob(os.path.join(root, 'baseline_*.py'))
     for cfg_path in paths:
         m = BatchTrain(cfg_path=cfg_path, data_mode='test', train_sleep_time=0, test_sleep_time=test_status)
-        m.common_train()
+        # m.common_train()
 
     # test different softnms thresholds
     iou_thrs = np.linspace(0.1, 0.9, 9)
@@ -24,6 +24,15 @@ def models_train(test_status=-10, data_type="fabric", const_weights=None):
             'uid': iou_thr
         }
         # softnms_model.common_train(**params)
+
+    # test stacking tricks
+    stacking_tricks = BatchTrain(cfg_path='../configs/{}/baseline_model_mst_range_1223x2446_500x1000_k9.py'.format(data_type),
+                                 data_mode='test', train_sleep_time=0, test_sleep_time=test_status)
+    params = {'test_cfg': {'rcnn': mmcv.ConfigDict(
+        score_thr=0.05, nms=dict(type='soft_nms', iou_thr=0.5), max_per_img=100)},
+        'uid': "stacking tricks"
+    }
+    stacking_tricks.common_train(**params)
 
 
 def main():

@@ -63,8 +63,8 @@ Test on GTX 2080Ti GPU:
 |:------------|:--------:|:--------:|
 | Baseline |   0.203 | 0.434 | 
 | Baseline+Multi-scale | 0.225 | 0.472 | 
-| Baseline+Multi-scale+Dimension Clustering |  |  | 
-| Baseline+Multi-scale+Dimension Clustering+Soft-NMS |  |  | 
+| Baseline+Multi-scale+Dimension Clustering | 0.295 | 0.570 | 
+| Baseline+Multi-scale+Dimension Clustering+Soft-NMS | **0.301** | **0.573** | 
 
 ## License
 
