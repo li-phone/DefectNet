@@ -66,6 +66,27 @@ Test on GTX 2080Ti GPU:
 | Baseline+Multi-scale+Dimension Clustering | 0.295 | 0.570 | 
 | Baseline+Multi-scale+Dimension Clustering+Soft-NMS | **0.301** | **0.573** | 
 
+- **DefectNet + Stacking Tricks**
+
+|IoU Threshold            | mAP    | AP@.5   |  F1-score |  ATT | ΔATT |
+|:------------|:--------:|:--------:|:--------:|:--------:|:--------:|
+| defectnet_const |   
+| defectnet_linear |   
+| defectnet_inverse |   
+| defectnet_exponential |   
+| defectnet_const+Multi-scale | 
+| defectnet_linear+Multi-scale | 
+| defectnet_inverse+Multi-scale | 
+| defectnet_exponential+Multi-scale | 
+| defectnet_const+Multi-scale+Dimension Clustering | 
+| defectnet_linear+Multi-scale+Dimension Clustering | 
+| defectnet_inverse+Multi-scale+Dimension Clustering | 
+| defectnet_exponential+Multi-scale+Dimension Clustering | 
+| defectnet_const+Multi-scale+Dimension Clustering+Soft-NMS | 
+| defectnet_linear+Multi-scale+Dimension Clustering+Soft-NMS | 
+| defectnet_inverse+Multi-scale+Dimension Clustering+Soft-NMS | 
+| defectnet_exponential+Multi-scale+Dimension Clustering+Soft-NMS | 
+
 ## License
 
 This project is released under the [Apache 2.0 license](LICENSE).

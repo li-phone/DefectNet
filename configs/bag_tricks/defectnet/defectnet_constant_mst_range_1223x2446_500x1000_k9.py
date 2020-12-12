@@ -233,7 +233,7 @@ first_model_cfg = None
 total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = '../work_dirs/' + dataset_name + '/defectnet_constant_mst_range_1223x2446_500x1000_k9'
+work_dir = '../work_dirs/' + dataset_name + '/defectnet/defectnet_constant_mst_range_1223x2446_500x1000_k9'
 resume_from = None
-load_from = '../work_dirs/bag_tricks/defectnet_constant_mst_range_1223x2446_500x1000/epoch_12.pth'
+load_from = '../work_dirs/bag_tricks/defectnet/defectnet_constant_mst_range_1223x2446_500x1000/epoch_12.pth'
 workflow = [('train', 1)]
