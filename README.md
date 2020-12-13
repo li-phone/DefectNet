@@ -41,7 +41,7 @@ Test on GTX 2080Ti GPU:
 
 - **Fabric defect dataset**
 
-| Model            | mAP    | F1-score   | ATT(MS)  | ATT_normal(MS)    | ATT_defective(MS)   | Remark |
+| Model            | mAP    | F1-score   | ATT(MS)  | ATT_defective(MS)    | ATT_normal(MS)   | Remark |
 |------------|:--------:|:--------:|:------------:|:-----------------|:-----------------|:-----------------|
 |one-model         | 0.198 | 0.859 | 67.768   |     68.281    |    67.142  |cascade_rcnn_r50_fpn_1x|
 |two-model_small| 0.168 | 0.841 | **40.769**   |      64.404      |      11.934     |r50_e52+cascade_rcnn_r50_fpn_1x| 
@@ -53,7 +53,7 @@ Test on GTX 2080Ti GPU:
 
 - **Bottle defect dataset**
 
-| Model            | mAP    | F1-score   | ATT(MS)  | ATT_normal(MS)    | ATT_defective(MS)      | Remark |
+| Model            | mAP    | F1-score   | ATT(MS)  | ATT_defective(MS)    | ATT_normal(MS)      | Remark |
 |------------|:--------:|:--------:|:------------:|:-----------------|:-----------------|:-----------------|
 |one-model         | 0.487 | 0.872 | 76.509   |   76.614  |     76.194    |cascade_rcnn_r50_fpn_1x|
 |two-model_small| 0.479 | 0.890 | 65.913   |  78.772  |   27.107  |r50_e52+cascade_rcnn_r50_fpn_1x| 
