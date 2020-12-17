@@ -9,14 +9,14 @@ from batch_train import BatchTrain
 def models_train(test_status=-10, data_type="fabric", const_weights=None):
     # train all models
     root = '../configs/{}/'.format(data_type)
-    paths = glob.glob(os.path.join(root, 'defectnet/defectnet_*.py'))
+    paths = glob.glob(os.path.join(root, 'defectnet/baseline_model.py'))
     paths.sort()
     for cfg_path in paths:
         m = BatchTrain(cfg_path=cfg_path, data_mode='test', train_sleep_time=0, test_sleep_time=test_status)
         m.common_train()
 
     # test stacking tricks
-    paths = glob.glob(os.path.join(root, '*_mst_*_k*.py'))
+    paths = glob.glob(os.path.join(root, 'defectnet/*_mst_*_k*.py'))
     paths.sort()
     for cfg_path in paths:
         m = BatchTrain(cfg_path=cfg_path, data_mode='test', train_sleep_time=0, test_sleep_time=test_status)
@@ -35,7 +35,7 @@ def models_train(test_status=-10, data_type="fabric", const_weights=None):
             score_thr=0.05, nms=dict(type='soft_nms', iou_thr=iou_thr), max_per_img=100)},
             'uid': iou_thr
         }
-        # softnms_model.common_train(**params)
+        softnms_model.common_train(**params)
 
 
 def main():

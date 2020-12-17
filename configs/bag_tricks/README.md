@@ -68,24 +68,25 @@ Test on GTX 2080Ti GPU:
 
 - **DefectNet + Stacking Tricks**
 
-|IoU Threshold            | mAP    | AP@.5   |  F1-score |  ATT | ΔATT |
-|:------------|:--------:|:--------:|:--------:|:--------:|:--------:|
-| defectnet_const |   
-| defectnet_linear |   
-| defectnet_inverse |   
-| defectnet_exponential |   
-| defectnet_const+Multi-scale | 
-| defectnet_linear+Multi-scale | 
-| defectnet_inverse+Multi-scale | 
-| defectnet_exponential+Multi-scale | 
-| defectnet_const+Multi-scale+Dimension Clustering | 
-| defectnet_linear+Multi-scale+Dimension Clustering | 
-| defectnet_inverse+Multi-scale+Dimension Clustering | 
-| defectnet_exponential+Multi-scale+Dimension Clustering | 
-| defectnet_const+Multi-scale+Dimension Clustering+Soft-NMS | 
-| defectnet_linear+Multi-scale+Dimension Clustering+Soft-NMS | 
-| defectnet_inverse+Multi-scale+Dimension Clustering+Soft-NMS | 
-| defectnet_exponential+Multi-scale+Dimension Clustering+Soft-NMS | 
+|IoU Threshold            | mAP    | AP@.5   |  F1-score |  ATT | ATT_d | ATT_n |
+|:------------|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
+| baseline |   0.200 | 0.427 | 0.859 | 67.856 | 68.265 | 673572 |
+| defectnet_const |   0.197| 0.423 | 0.934 | 50.391 |69.017 | 27.668 |
+| defectnet_linear | 0.155 | 0.343 | 0.923 | 49.491 | 67.712 | 27.261 |
+| defectnet_inverse | 0.183 | 0.395 | 0.933 | 49.760 | 68.250 | 27.203 |
+| defectnet_exponential | 0.188 | 0.404 | 0.921 | 49.021 | 67.108 | 26.955 |
+| defectnet_const+Multi-scale | 0.200 | 0.424 | 0.932 | 49.243 | 67.857 | 26.535 |
+| defectnet_linear+Multi-scale |0.172|0.383|0.931|49.424|67.968|26.801|
+| defectnet_inverse+Multi-scale |0.204|0.434|0.940|49.456|68.166|26.630|
+| defectnet_exponential+Multi-scale | 0.201|0.425|0.926|49.248|67.472|27.014|
+| defectnet_const+Multi-scale+Dimension Clustering | 0.280 |0.548|0.940|48.845|67.785|25.739|
+| defectnet_linear+Multi-scale+Dimension Clustering | 0.251|0.503|0.934|50.684|70.367|26.670|
+| defectnet_inverse+Multi-scale+Dimension Clustering |0.282|0.543|0.940|50.632|70.358|26.567|
+| defectnet_exponential+Multi-scale+Dimension Clustering |0.284|0.550|0.935|50.633|70.086|26.901|
+| defectnet_const+Multi-scale+Dimension Clustering+Soft-NMS |0.287|0.549|0.940|53.348|76.071|25.625| 
+| defectnet_linear+Multi-scale+Dimension Clustering+Soft-NMS | 0.257|0.505|0.934|53.463|76.042|25.917|
+| defectnet_inverse+Multi-scale+Dimension Clustering+Soft-NMS | 0.288|0.544|0.940|53.388|76.079|25.705|
+| defectnet_exponential+Multi-scale+Dimension Clustering+Soft-NMS | 0.290|0.552|0.935|53.416|75.703|26.227|
 
 ## License
 
