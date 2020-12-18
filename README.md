@@ -12,7 +12,7 @@ mirror: [https://gitee.com/liphone/DefectNet.git](https://gitee.com/liphone/Defe
     
 ## Prepare Dataset
 
-- **Fabric defect dataset**
+- **Fabric defect dataset** is available at: [https://pan.baidu.com/s/1b7eFGkrgTm4F0Ww-hATqVw](https://pan.baidu.com/s/1b7eFGkrgTm4F0Ww-hATqVw)，提取码：6oj8 
 
 |            | Total    | Normal   | Defective    | Normal Proportion |
 |------------|:--------:|:--------:|:------------:|:-----------------:|
