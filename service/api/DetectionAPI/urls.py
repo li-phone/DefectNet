@@ -21,5 +21,6 @@ from .service import DetectionService
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('detect/', DetectionService.detect),
+    # api service
+    url(r'^api/detect/$', DetectionService.detect),
 ]
