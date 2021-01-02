@@ -210,7 +210,7 @@ def parse_args():
 
 
 def main():
-    data_type = "bottle"
+    data_type = "tile"
     data = COCOAnalysis(
         ann_files=[
             '/home/lifeng/undone-work/DefectNet/tools/data/{}/annotations/instance_all.json'.format(data_type),

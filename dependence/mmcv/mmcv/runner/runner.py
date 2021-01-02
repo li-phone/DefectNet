@@ -279,19 +279,22 @@ class Runner(object):
 
         self.call_hook('before_train_epoch')
         for i, data_batch in enumerate(data_loader):
-            self._inner_iter = i
-            self.call_hook('before_train_iter')
-            # kwargs['epoch'] = self._iter
-            outputs = self.batch_processor(
-                self.model, data_batch, train_mode=True, **kwargs)
-            if not isinstance(outputs, dict):
-                raise TypeError('batch_processor() must return a dict')
-            if 'log_vars' in outputs:
-                self.log_buffer.update(outputs['log_vars'],
-                                       outputs['num_samples'])
-            self.outputs = outputs
-            self.call_hook('after_train_iter')
-            self._iter += 1
+            if not isinstance(data_batch, list):
+                data_batch = [data_batch]
+            for data in data_batch:
+                self._inner_iter = i
+                self.call_hook('before_train_iter')
+                # kwargs['epoch'] = self._iter
+                outputs = self.batch_processor(
+                    self.model, data, train_mode=True, **kwargs)
+                if not isinstance(outputs, dict):
+                    raise TypeError('batch_processor() must return a dict')
+                if 'log_vars' in outputs:
+                    self.log_buffer.update(outputs['log_vars'],
+                                           outputs['num_samples'])
+                self.outputs = outputs
+                self.call_hook('after_train_iter')
+                self._iter += 1
 
         self.call_hook('after_train_epoch')
         self._epoch += 1

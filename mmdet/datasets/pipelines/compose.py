@@ -20,10 +20,22 @@ class Compose(object):
                 raise TypeError('transform must be callable or a dict')
 
     def __call__(self, data):
-        for t in self.transforms:
+        last_ind = 0
+        for i, t in enumerate(self.transforms):
+            last_ind = i
             data = t(data)
+            if isinstance(data, list):
+                break
             if data is None:
                 return None
+        if isinstance(data, list):
+            data, data_list = [], data
+            for idx, d in enumerate(data_list):
+                for i, t in enumerate(self.transforms[last_ind + 1:]):
+                    d = t(d)
+                    if d is None:
+                        break
+                data.append(d)
         return data
 
     def __repr__(self):

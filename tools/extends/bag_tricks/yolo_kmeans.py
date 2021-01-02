@@ -88,7 +88,7 @@ def save_plt(save_name, file_types=None):
 def main():
     import pandas as pd
     from tqdm import tqdm
-    train_file = '/home/lifeng/undone-work/DefectNet/tools/data/fabric/annotations/instance_train.json'
+    train_file = '/home/lifeng/undone-work/DefectNet/tools/data/tile/annotations/instance_train.json'
     ks, accs = [], []
     for i in tqdm(range(1, 11)):
         ratios, acc, out = coco_kmeans(train_file, k=i, random_state=666)
@@ -99,7 +99,7 @@ def main():
         x='k', y='average IoU', marker='^',
         grid=True, xlim=(1, 10), ylim=(0., 100.))
     plt.ylabel('train_file')
-    save_plt('./k-means_cluster/k-means_cluster.jpg')
+    save_plt('./k-means_cluster/tile/k-means_cluster.jpg')
     plt.show()
 
 

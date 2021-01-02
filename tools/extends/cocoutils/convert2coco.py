@@ -241,6 +241,8 @@ def convert2coco(anns, save_name, img_dir, label2cat=None, bgcat=None, supercate
     if 'id' not in list(anns.columns):
         anns['id'] = list(range(anns.shape[0]))
     if label2cat is None:
+        if 'category' in list(anns.columns):
+            anns.rename(columns={'category': 'label'}, inplace=True)
         label2cat = list(np.array(anns['label'].unique()))
         if bgcat in label2cat:
             label2cat.remove(bgcat)
@@ -256,7 +258,7 @@ def convert2coco(anns, save_name, img_dir, label2cat=None, bgcat=None, supercate
 
     coco = dict(info=info, license=license, categories=[], images=[], annotations=[])
     label2cat = {v: k for k, v in label2cat.items()}
-    coco['categories'] = [dict(name=k, id=v, supercategory=supercategory[v]) for k, v in label2cat.items()]
+    coco['categories'] = [dict(name=str(k), id=v, supercategory=supercategory[v]) for k, v in label2cat.items()]
 
     images = list(anns['file_name'].unique())
     import cv2 as cv
@@ -265,7 +267,9 @@ def convert2coco(anns, save_name, img_dir, label2cat=None, bgcat=None, supercate
             img_ = cv.imread(os.path.join(img_dir, v))
             height_, width_, _ = img_.shape
         else:
-            height_, width_, _ = None, None, 3
+            row = anns.iloc[i]
+            height_, width_, _ = int(row['image_height']), int(row['image_width']), 3
+        assert height_ is not None and width_ is not None
         keep_df = anns[anns['file_name'] == v]
         cats = list(keep_df['label'].unique())
         img_label = 0 if len(cats) == 0 or (len(cats) == 1 and cats[0] == bgcat) else 1
@@ -323,9 +327,14 @@ def imgdir2coco(coco_sample, save_name, img_dir):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Transform other dataset format into coco format')
-    parser.add_argument('ann_or_dir', help='annotation file or test image directory')
-    parser.add_argument('save_name', help='save_name')
-    parser.add_argument('img_dir', help='img_dir')
+    parser.add_argument('--ann_or_dir',
+                        default="/home/lifeng/undone-work/dataset/detection/tile/tile_round1_train_20201231/train_annos.json",
+                        help='annotation file or test image directory')
+    parser.add_argument('--save_name',
+                        default="/home/lifeng/undone-work/dataset/detection/tile/annotations/instance_all.json",
+                        help='save_name')
+    parser.add_argument('--img_dir',
+                        default="/home/lifeng/undone-work/dataset/detection/tile/tile_round1_train_20201231/train_imgs/", help='img_dir')
     parser.add_argument(
         '--options',
         nargs='+', action=MultipleKVAction,

@@ -66,7 +66,9 @@ def check_coco(src, dst, img_dir=None, replace=True):
                 img_ = cv.imread(os.path.join(img_dir, v['file_name']))
                 height_, width_, _ = img_.shape
             else:
-                height_, width_, _ = None, None, 3
+                row = coco['images'][i]
+                height_, width_, _ = int(row['height']), int(row['width']), 3
+            assert height_ is not None and width_ is not None
             v['width'] = width_
             v['height'] = height_
     save_dict(dst, coco)
@@ -84,6 +86,7 @@ def check_box(coco, save_name, img_dir):
     for k, v in annotations.items():
         b = v['bbox']
         image = images[v['image_id']]
+        assert image is not None and image['width'] is not None
         if not (0 <= b[0] <= image['width'] and 0 <= b[1] <= image['height'] and b[2] > 0 and b[3] > 0 \
                 and 0 <= b[0] + b[2] <= image['width'] and 0 <= b[1] + b[3] <= image['height']):
             error_boxes.append(v['id'])
@@ -169,9 +172,15 @@ def check_box(coco, save_name, img_dir):
 def parse_args():
     import argparse
     parser = argparse.ArgumentParser(description='Check ann_file')
-    parser.add_argument('ann_file', help='annotation file or test image directory')
-    parser.add_argument('save_name', help='save_name')
-    parser.add_argument('img_dir', help='img_dir')
+    parser.add_argument('--ann_file',
+                        default='/home/lifeng/undone-work/DefectNet/tools/data/tile/annotations/instance_all.json',
+                        help='annotation file or test image directory')
+    parser.add_argument('--save_name',
+                        default='/home/lifeng/undone-work/DefectNet/tools/data/tile/annotations/instance_all-check.json',
+                        help='save_name')
+    parser.add_argument('--img_dir',
+                        default='"/home/lifeng/undone-work/dataset/detection/tile/tile_round1_train_20201231/train_imgs/"',
+                        help='img_dir')
     parser.add_argument('--check_type', default='coco,box', help='check_type')
     args = parser.parse_args()
     return args

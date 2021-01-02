@@ -228,7 +228,7 @@ def draw_coco(ann_file, img_dir, save_dir, cat2label=None, on='image_id', thresh
                 cat2label[v['id']] = v['name']
     # Comparison of defect data and general object data(bottle dataset).
     s = ['000000000650.jpg', '000000000675.jpg']
-    images = [v for v in anns['images'] if v['file_name'] in s]
+    images = [v for v in anns['images']]
     images = json_normalize(images)
     if 'id' in list(images.columns):
         images.rename(columns={'id': 'image_id'}, inplace=True)
@@ -294,9 +294,9 @@ def parse_args():
 
 def main():
     args = parse_args()
-    args.ann_file = r'D:\home\undone-work\毕业课题\目标检测小论文\MyPapers\DefectNet\Figures\dataset_comparison\instances_train2017.json'
-    args.img_dir = r'D:\home\undone-work\毕业课题\目标检测小论文\MyPapers\DefectNet\Figures\dataset_comparison\draw_coco'
-    args.save_dir = r'D:\home\undone-work\毕业课题\目标检测小论文\MyPapers\DefectNet\Figures\dataset_comparison\draw_coco'
+    args.ann_file = "/home/lifeng/undone-work/dataset/detection/tile/annotations/instance_all.json"
+    args.img_dir = "/home/lifeng/undone-work/dataset/detection/tile/tile_round1_train_20201231/train_imgs/"
+    args.save_dir = "/home/lifeng/undone-work/dataset/detection/tile/tile_round1_train_20201231/train_imgs_draw_coco"
     kwargs = {} if args.options is None else args.options
     draw_coco(args.ann_file, args.img_dir, args.save_dir, **kwargs)
 
