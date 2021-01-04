@@ -20,7 +20,7 @@ model = dict(
         in_channels=256,
         feat_channels=256,
         anchor_scales=[8],
-        anchor_ratios=[0.83, 0.88, 1.0, 1.1, 1.46, 1.61],
+        anchor_ratios=[0.5, 1.0, 2.0],
         anchor_strides=[4, 8, 16, 32, 64],
         target_means=[.0, .0, .0, .0],
         target_stds=[1.0, 1.0, 1.0, 1.0],
@@ -164,7 +164,9 @@ img_norm_cfg = dict(
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True),
-    dict(type='Resize', img_scale=[(1333, 2000), (600, 1000)], keep_ratio=True, multiscale_mode='range'),
+    dict(type='CutImage', window=(5332, 3200), step=(2666, 1600)),
+    # dict(type='CutImage'),
+    dict(type='Resize', img_scale=(1333, 800), keep_ratio=True),
     dict(type='RandomFlip', flip_ratio=0.5),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='Pad', size_divisor=32),
@@ -173,6 +175,7 @@ train_pipeline = [
 ]
 test_pipeline = [
     dict(type='LoadImageFromFile'),
+    dict(type='CutImage', training=False, window=(5332, 3200), step=(2666, 1600), order_index=False),
     dict(
         type='MultiScaleFlipAug',
         img_scale=(1333, 800),
@@ -183,12 +186,13 @@ test_pipeline = [
             dict(type='Normalize', **img_norm_cfg),
             dict(type='Pad', size_divisor=32),
             dict(type='ImageToTensor', keys=['img']),
-            dict(type='Collect', keys=['img']),
+            dict(type='Collect', keys=['img', 'no_cut_img_shape', 'top_left']),
+            # dict(type='Collect', keys=['img']),
         ])
 ]
 data = dict(
     imgs_per_gpu=2,
-    workers_per_gpu=2,
+    workers_per_gpu=8,
     train=dict(
         type=dataset_type,
         ann_file=data_root + '/annotations/instance_train.json',
@@ -198,13 +202,13 @@ data = dict(
         pipeline=train_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + '/annotations/instance_test.json',
+        ann_file=data_root + '/annotations/instance_XS_test.json',
         img_prefix=data_root + '/tile_round1_train_20201231/train_imgs/',
         # category_ids for not coco_eval, start from 0
         # ignore_ids=[0],
         pipeline=test_pipeline))
 # optimizer
-optimizer = dict(type='SGD', lr=0.02 / 8, momentum=0.9, weight_decay=0.0001)
+optimizer = dict(type='SGD', lr=0.02 / 4, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 # learning policy
 lr_config = dict(
@@ -216,7 +220,7 @@ lr_config = dict(
 checkpoint_config = dict(interval=1)
 # yapf:disable
 log_config = dict(
-    interval=50,
+    interval=20,
     hooks=[
         dict(type='TextLoggerHook'),
         # dict(type='TensorboardLoggerHook')
@@ -225,10 +229,10 @@ log_config = dict(
 # runtime settings
 dataset_name = 'tile'
 first_model_cfg = None
-total_epochs = 12
+total_epochs = 12 * 3
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = '../work_dirs/' + dataset_name + '/baseline_model_mst_kmeans'
+work_dir = '../work_dirs/' + dataset_name + '/baseline_model_cut_5332x3200'
 resume_from = None
 load_from = '../work_dirs/pretrained/cascade_rcnn_r50_fpn_1x_coco_20200316-3dc56deb.pth'
 workflow = [('train', 1)]

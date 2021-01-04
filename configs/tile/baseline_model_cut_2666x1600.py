@@ -164,7 +164,8 @@ img_norm_cfg = dict(
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True),
-    dict(type='CutImage', window=(5332, 3200), step=(2666, 1600)),
+    dict(type='CutImage', window=(5332 // 2, 3200 // 2), step=(2666 // 2, 1600 // 2)),
+    # dict(type='CutImage'),
     dict(type='Resize', img_scale=(1333, 800), keep_ratio=True),
     dict(type='RandomFlip', flip_ratio=0.5),
     dict(type='Normalize', **img_norm_cfg),
@@ -174,6 +175,8 @@ train_pipeline = [
 ]
 test_pipeline = [
     dict(type='LoadImageFromFile'),
+    dict(type='CutImage', training=False, window=(5332 // 2, 3200 // 2), step=(2666 // 2, 1600 // 2),
+         order_index=False),
     dict(
         type='MultiScaleFlipAug',
         img_scale=(1333, 800),
@@ -184,28 +187,29 @@ test_pipeline = [
             dict(type='Normalize', **img_norm_cfg),
             dict(type='Pad', size_divisor=32),
             dict(type='ImageToTensor', keys=['img']),
-            dict(type='Collect', keys=['img']),
+            dict(type='Collect', keys=['img', 'no_cut_img_shape', 'top_left']),
+            # dict(type='Collect', keys=['img']),
         ])
 ]
 data = dict(
     imgs_per_gpu=2,
-    workers_per_gpu=0,
+    workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + '/annotations/instance_train.json',
+        ann_file=data_root + '/annotations/instance_XS_train.json',
         img_prefix=data_root + '/tile_round1_train_20201231/train_imgs/',
         # category_ids for not load and not train, start from 1
         # ignore_ids=[1],
         pipeline=train_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + '/annotations/instance_test.json',
+        ann_file=data_root + '/annotations/instance_XS_test.json',
         img_prefix=data_root + '/tile_round1_train_20201231/train_imgs/',
         # category_ids for not coco_eval, start from 0
         # ignore_ids=[0],
         pipeline=test_pipeline))
 # optimizer
-optimizer = dict(type='SGD', lr=0.02 / 8, momentum=0.9, weight_decay=0.0001)
+optimizer = dict(type='SGD', lr=0.02 / 4, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 # learning policy
 lr_config = dict(
@@ -226,10 +230,10 @@ log_config = dict(
 # runtime settings
 dataset_name = 'tile'
 first_model_cfg = None
-total_epochs = 12 + 1
+total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = '../work_dirs/' + dataset_name + '/baseline_model'
+work_dir = '../work_dirs/' + dataset_name + '/baseline_model_cut_2666x1600'
 resume_from = None
 load_from = '../work_dirs/pretrained/cascade_rcnn_r50_fpn_1x_coco_20200316-3dc56deb.pth'
 workflow = [('train', 1)]

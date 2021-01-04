@@ -26,46 +26,58 @@ def single_gpu_test(model, data_loader, show=False, first_model=None):
     if first_model is not None:
         first_model.model.eval()
     model.eval()
-    results, result_times = [], []
+    results_list, result_times_list = [], []
     dataset = data_loader.dataset
     prog_bar = mmcv.ProgressBar(len(dataset))
-    for i, data in enumerate(data_loader):
-        with torch.no_grad():
-            if first_model is not None:
-                img_path = data['img_meta'][0].data[0][0]['filename']
-                first_result, first_data_times, first_infer_times = first_model.infer(img_path)
-                if first_result[0] == 0:
-                    # no defect
-                    result = 0
-                    result_times.append(first_infer_times[0])
+    for i, data_batch in enumerate(data_loader):
+        if not isinstance(data_batch, list):
+            data_batch = [data_batch]
+        results, result_times = [], []
+        for data in data_batch:
+            with torch.no_grad():
+                if first_model is not None:
+                    img_path = data['img_meta'][0].data[0][0]['filename']
+                    first_result, first_data_times, first_infer_times = first_model.infer(img_path)
+                    if first_result[0] == 0:
+                        # no defect
+                        result = 0
+                        result_times.append(first_infer_times[0])
+                    else:
+                        torch.cuda.synchronize()
+                        start_t = time.time()
+                        result = model(return_loss=False, rescale=not show, **data)
+                        torch.cuda.synchronize()
+                        end_t = time.time()
+                        result_times.append(end_t - start_t + first_infer_times[0])
                 else:
                     torch.cuda.synchronize()
                     start_t = time.time()
                     result = model(return_loss=False, rescale=not show, **data)
                     torch.cuda.synchronize()
                     end_t = time.time()
-                    result_times.append(end_t - start_t + first_infer_times[0])
+                    result_times.append(end_t - start_t)
+            if isinstance(result, list):
+                results.append(result)
+            elif isinstance(result, int):
+                r = [np.empty([0, 5], dtype=np.float32) for i in range(len(dataset.cat2label))]
+                results.append(r)
             else:
-                torch.cuda.synchronize()
-                start_t = time.time()
-                result = model(return_loss=False, rescale=not show, **data)
-                torch.cuda.synchronize()
-                end_t = time.time()
-                result_times.append(end_t - start_t)
-        if isinstance(result, list):
-            results.append(result)
-        elif isinstance(result, int):
-            r = [np.empty([0, 5], dtype=np.float32) for i in range(len(dataset.cat2label))]
-            results.append(r)
-        else:
-            r = [np.empty([0, 5], dtype=np.float32) for i in range(len(dataset.cat2label))]
-            results.append(r)
-        if show:
-            model.module.show_result(data, result)
-        batch_size = data['img'][0].size(0)
-        for _ in range(batch_size):
-            prog_bar.update()
-    return results, result_times
+                r = [np.empty([0, 5], dtype=np.float32) for i in range(len(dataset.cat2label))]
+                results.append(r)
+            if show:
+                model.module.show_result(data, result)
+            batch_size = data['img'][0].size(0)
+            for _ in range(batch_size):
+                prog_bar.update()
+        if len(results) > 1:
+            tmp_result = [np.empty([0, 5], dtype=np.float32) for i in range(len(dataset.cat2label))]
+            for i in range(len(tmp_result)):
+                for j in range(len(results)):
+                    tmp_result[i] = np.append(tmp_result[i], results[j][i], axis=0)
+            results = tmp_result
+        results_list.append(results)
+        result_times_list.append(sum(result_times))
+    return results_list, result_times_list
 
 
 def have_defect(anns, images, threshold=0., background_id=0):

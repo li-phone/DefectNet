@@ -9,6 +9,7 @@ from .transforms import (Albu, Expand, MinIoURandomCrop, Normalize, Pad,
                          SegRescale)
 
 from .cut_image import CutImage
+from .cut_roi import CutROI
 
 __all__ = [
     'Compose', 'to_tensor', 'ToTensor', 'ImageToTensor', 'ToDataContainer',
@@ -16,5 +17,5 @@ __all__ = [
     'LoadProposals', 'MultiScaleFlipAug', 'Resize', 'RandomFlip', 'Pad',
     'RandomCrop', 'Normalize', 'SegRescale', 'MinIoURandomCrop', 'Expand',
     'PhotoMetricDistortion', 'Albu', 'InstaBoost',
-    'CutImage',
+    'CutImage', 'CutROI',
 ]

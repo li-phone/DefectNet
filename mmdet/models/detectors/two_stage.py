@@ -105,7 +105,7 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
         # rpn
         if self.with_rpn:
             rpn_outs = self.rpn_head(x)
-            outs = outs + (rpn_outs, )
+            outs = outs + (rpn_outs,)
         proposals = torch.randn(1000, 4).cuda()
         # bbox head
         rois = bbox2roi([proposals])
@@ -124,7 +124,7 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
             if self.with_shared_head:
                 mask_feats = self.shared_head(mask_feats)
             mask_pred = self.mask_head(mask_feats)
-            outs = outs + (mask_pred, )
+            outs = outs + (mask_pred,)
         return outs
 
     def forward_train(self,
@@ -264,7 +264,8 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
                                 img,
                                 img_meta,
                                 proposals=None,
-                                rescale=False):
+                                rescale=False,
+                                **kwargs):
         """Async test without augmentation."""
         assert self.with_bbox, "Bbox head must be implemented."
         x = self.extract_feat(img)
@@ -292,7 +293,7 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
                 mask_test_cfg=self.test_cfg.get('mask'))
             return bbox_results, segm_results
 
-    def simple_test(self, img, img_meta, proposals=None, rescale=False):
+    def simple_test(self, img, img_meta, proposals=None, rescale=False, **kwargs):
         """Test without augmentation."""
         assert self.with_bbox, "Bbox head must be implemented."
 

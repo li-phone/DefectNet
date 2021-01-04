@@ -414,7 +414,7 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
 
         return losses
 
-    def simple_test(self, img, img_meta, proposals=None, rescale=False):
+    def simple_test(self, img, img_meta, proposals=None, rescale=False, **kwargs):
         """Run inference on a single image.
 
         Args:
@@ -520,7 +520,13 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
             results = (ms_bbox_result['ensemble'], ms_segm_result['ensemble'])
         else:
             results = ms_bbox_result['ensemble']
-
+        if 'top_left' in kwargs.keys():
+            for i in range(len(results)):
+                if len(results[i]) > 0:
+                    results[i][:, 0] += float(kwargs['top_left'][0][0])
+                    results[i][:, 1] += float(kwargs['top_left'][0][1])
+                    results[i][:, 2] += float(kwargs['top_left'][0][0])
+                    results[i][:, 3] += float(kwargs['top_left'][0][1])
         return results
 
     def aug_test(self, imgs, img_metas, proposals=None, rescale=False):
