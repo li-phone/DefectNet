@@ -186,7 +186,7 @@ test_pipeline = [
             dict(type='Normalize', **img_norm_cfg),
             dict(type='Pad', size_divisor=32),
             dict(type='ImageToTensor', keys=['img']),
-            dict(type='Collect', keys=['img', 'no_cut_img_shape', 'top_left']),
+            dict(type='Collect', keys=['img', 'roi_top_left']),
             # dict(type='Collect', keys=['img']),
         ])
 ]

@@ -12,7 +12,15 @@ mirror: [https://gitee.com/liphone/DefectNet.git](https://gitee.com/liphone/Defe
     
 ## Prepare Dataset
 
-- **Fabric defect dataset** is available at: [https://pan.baidu.com/s/1b7eFGkrgTm4F0Ww-hATqVw](https://pan.baidu.com/s/1b7eFGkrgTm4F0Ww-hATqVw)，提取码：6oj8 
+###Fabric Defect Dataset 
+
+**Baidu Disk**
+
+Link:https://pan.baidu.com/s/1b7eFGkrgTm4F0Ww-hATqVw, Password:6oj8
+
+**DuBox**
+
+Link:https://dubox.com/s/1QhGpKcEDNjwj9vis5iYWzw, Password:vx3h
 
 |            | Total    | Normal   | Defective    | Normal Proportion |
 |------------|:--------:|:--------:|:------------:|:-----------------:|
@@ -20,7 +28,11 @@ mirror: [https://gitee.com/liphone/DefectNet.git](https://gitee.com/liphone/Defe
 | train      | 6660     | 2913     | 3747         | 0.44              | 
 | test       | 1665     | 750      | 915          | 0.45              |
 
-- **Bottle defect dataset** is available at: [https://pan.baidu.com/s/1RH0-hqGOWa-sgbAUdRQmGg](https://pan.baidu.com/s/1RH0-hqGOWa-sgbAUdRQmGg)，提取码：yd4b 
+###Bottle Defect Dataset
+ 
+**Baidu Disk**
+
+ Link:https://pan.baidu.com/s/1RH0-hqGOWa-sgbAUdRQmGg, Password：yd4b 
 
 |            | Total    | Normal   | Defective    | Normal Proportion |
 |------------|:--------:|:--------:|:------------:|:-----------------:|

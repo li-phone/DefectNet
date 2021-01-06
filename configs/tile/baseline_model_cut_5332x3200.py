@@ -192,7 +192,7 @@ test_pipeline = [
 ]
 data = dict(
     imgs_per_gpu=2,
-    workers_per_gpu=8,
+    workers_per_gpu=4,
     train=dict(
         type=dataset_type,
         ann_file=data_root + '/annotations/instance_train.json',
@@ -202,7 +202,7 @@ data = dict(
         pipeline=train_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + '/annotations/instance_XS_test.json',
+        ann_file=data_root + '/annotations/instance_test.json',
         img_prefix=data_root + '/tile_round1_train_20201231/train_imgs/',
         # category_ids for not coco_eval, start from 0
         # ignore_ids=[0],

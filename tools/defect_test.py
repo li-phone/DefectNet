@@ -69,13 +69,11 @@ def single_gpu_test(model, data_loader, show=False, first_model=None):
             batch_size = data['img'][0].size(0)
             for _ in range(batch_size):
                 prog_bar.update()
-        if len(results) > 1:
-            tmp_result = [np.empty([0, 5], dtype=np.float32) for i in range(len(dataset.cat2label))]
-            for i in range(len(tmp_result)):
-                for j in range(len(results)):
-                    tmp_result[i] = np.append(tmp_result[i], results[j][i], axis=0)
-            results = tmp_result
-        results_list.append(results)
+        tmp_result = [np.empty([0, 5], dtype=np.float32) for i in range(len(dataset.cat2label))]
+        for i in range(len(tmp_result)):
+            for j in range(len(results)):
+                tmp_result[i] = np.append(tmp_result[i], results[j][i], axis=0)
+        results_list.append(tmp_result)
         result_times_list.append(sum(result_times))
     return results_list, result_times_list
 
