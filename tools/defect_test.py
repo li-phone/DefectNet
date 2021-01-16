@@ -33,6 +33,7 @@ def single_gpu_test(model, data_loader, show=False, first_model=None):
         if not isinstance(data_batch, list):
             data_batch = [data_batch]
         results, result_times = [], []
+        batch_size = 1
         for data in data_batch:
             with torch.no_grad():
                 if first_model is not None:
@@ -67,8 +68,8 @@ def single_gpu_test(model, data_loader, show=False, first_model=None):
             if show:
                 model.module.show_result(data, result)
             batch_size = data['img'][0].size(0)
-            for _ in range(batch_size):
-                prog_bar.update()
+        for _ in range(batch_size):
+            prog_bar.update()
         tmp_result = [np.empty([0, 5], dtype=np.float32) for i in range(len(dataset.cat2label))]
         for i in range(len(tmp_result)):
             for j in range(len(results)):

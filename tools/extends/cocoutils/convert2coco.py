@@ -328,13 +328,13 @@ def imgdir2coco(coco_sample, save_name, img_dir):
 def parse_args():
     parser = argparse.ArgumentParser(description='Transform other dataset format into coco format')
     parser.add_argument('--ann_or_dir',
-                        default="/home/lifeng/undone-work/dataset/detection/tile/tile_round1_train_20201231/train_annos.json",
+                        default="/home/lifeng/undone-work/dataset/detection/tile/annotations/instance_train.json",
                         help='annotation file or test image directory')
     parser.add_argument('--save_name',
-                        default="/home/lifeng/undone-work/dataset/detection/tile/annotations/instance_all.json",
+                        default="/home/lifeng/undone-work/dataset/detection/tile/annotations/submit_testA.json",
                         help='save_name')
     parser.add_argument('--img_dir',
-                        default="/home/lifeng/undone-work/dataset/detection/tile/tile_round1_train_20201231/train_imgs/", help='img_dir')
+                        default="/home/lifeng/undone-work/dataset/detection/tile/tile_round1_testA_20201231/testA_imgs/", help='img_dir')
     parser.add_argument(
         '--options',
         nargs='+', action=MultipleKVAction,
@@ -343,7 +343,7 @@ def parse_args():
     parser.add_argument(
         '--fmt',
         choices=['json', 'xml', 'test_dir', 'csv'],
-        default='json', help='format type')
+        default='test_dir', help='format type')
     args = parser.parse_args()
     return args
 

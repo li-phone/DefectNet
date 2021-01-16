@@ -527,6 +527,13 @@ class CascadeRCNN(BaseDetector, RPNTestMixin):
                     results[i][:, 1] += float(kwargs['top_left'][0][1])
                     results[i][:, 2] += float(kwargs['top_left'][0][0])
                     results[i][:, 3] += float(kwargs['top_left'][0][1])
+        if 'roi_top_left' in kwargs.keys():
+            for i in range(len(results)):
+                if len(results[i]) > 0:
+                    results[i][:, 0] += float(kwargs['roi_top_left'][0][0])
+                    results[i][:, 1] += float(kwargs['roi_top_left'][0][1])
+                    results[i][:, 2] += float(kwargs['roi_top_left'][0][0])
+                    results[i][:, 3] += float(kwargs['roi_top_left'][0][1])
         return results
 
     def aug_test(self, imgs, img_metas, proposals=None, rescale=False):

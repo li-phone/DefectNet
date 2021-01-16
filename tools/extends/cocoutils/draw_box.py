@@ -108,7 +108,7 @@ class DrawBox(object):
             fontsize = int(min(image.size) / 1000 * 24)
         if line_width is None:
             line_width = int(min(image.size) / 1000 * 3)
-        font = ImageFont.truetype('simsun.ttc', fontsize, encoding="uti-8")
+        font = ImageFont.truetype(os.path.join(os.path.dirname(__file__), 'simsun.ttc'), fontsize, encoding="uti-8")
 
         draw = ImageDraw.Draw(image)
         im_width, im_height = image.size

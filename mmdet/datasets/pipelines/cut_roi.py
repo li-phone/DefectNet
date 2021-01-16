@@ -2,6 +2,7 @@ import heapq
 import cv2
 import numpy as np
 import copy
+import matplotlib.pyplot as plt
 
 from ..registry import PIPELINES
 
@@ -55,12 +56,16 @@ class CutROI(object):
         return rect, (p1, p2, p3, p4)
 
     @staticmethod
-    def cut_max_rect(image, threshold='ostu', method='findContours'):
+    def cut_max_rect(image, threshold='ostu', method='findContours', **kwargs):
         if isinstance(image, str):
             image = cv2.imread(image)
         img = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         if isinstance(threshold, str) and threshold == 'ostu':
             thr, img = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU)
+            # from uuid import uuid4
+            # cv2.imwrite("tmp/{}_.jpg".format(uuid4()), img)
+            # plt.imshow(img)
+            # plt.show()
         elif str(threshold).isdigit():
             thr = float(threshold)
         else:
@@ -71,11 +76,24 @@ class CutROI(object):
             contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
             if len(contours) < 1:
                 return None, None
-            max_ind = 0
+            max_size, max_area = 0, 0
+            size_idx, area_idx = 0, 0
             for i in range(len(contours)):
-                if len(contours[max_ind]) < len(contours[i]):
-                    max_ind = i
-            rect = cv2.boundingRect(contours[max_ind])
+                if len(contours[size_idx]) < len(contours[i]):
+                    size_idx = i
+                    max_size = len(contours[i])
+                area_ = cv2.contourArea(contours[i])
+                if area_ > max_area:
+                    area_idx = i
+                    max_area = area_
+            x, y, w, h = cv2.boundingRect(contours[area_idx])
+            rect = [x, y, x + w, y + h]
+            # kwargs['area'].append(max_area)
+            # cv2.drawContours(image, contours, area_idx, (0, 255, 0), thickness=15)
+            # rect = [int(x) for x in rect]
+            # cv2.rectangle(image, tuple(rect[:2]), tuple(rect[2:]), (255, 0, 0), thickness=10)
+            # plt.imshow(image)
+            # plt.show()
             return rect, None
         elif method == 'HoughLinesP':
             canny_img = cv2.Canny(img, thr, 255)
@@ -115,13 +133,32 @@ class CutROI(object):
             results['ann_info']['bboxes'][:, 2] -= results['roi_top_left'][0]
             results['ann_info']['bboxes'][:, 1] -= results['roi_top_left'][1]
             results['ann_info']['bboxes'][:, 3] -= results['roi_top_left'][1]
-            results['gt_bboxes'][:, 0] -= results['roi_top_left'][0]
-            results['gt_bboxes'][:, 2] -= results['roi_top_left'][0]
-            results['gt_bboxes'][:, 1] -= results['roi_top_left'][1]
-            results['gt_bboxes'][:, 3] -= results['roi_top_left'][1]
-
+            results['gt_bboxes'] = results['ann_info']['bboxes']
+        # # test draw cut roi
+        # from mmdet.third_party.draw_box import DrawBox
+        # import os
+        # drawBox = DrawBox(color_num=7)
+        # image = drawBox.draw_box(results['img'], results['gt_bboxes'], results['gt_labels'])
+        # image = np.array(image)
+        # cv2.imwrite("tmp/{}".format(os.path.basename(results['filename'])), image)
+        # import matplotlib.pyplot as plt
+        # plt.imshow(image)
+        # plt.show()
         return results
 
     def __repr__(self):
         return self.__class__.__name__ + '(method={})'.format(
             self.method)
+
+
+if __name__ == '__main__':
+    import glob
+    from tqdm import tqdm
+
+    images = glob.glob("/home/lifeng/undone-work/dataset/detection/tile/tile_round1_train_20201231/*.jpg")
+    area = []
+    for file in tqdm(images):
+        image = cv2.imread(file)
+        CutROI.cut_max_rect(image, area=area)
+    area = np.array(area)
+    print('min:{},max:{},avg:{}'.format(np.min(area), np.max(area), np.mean(area)))

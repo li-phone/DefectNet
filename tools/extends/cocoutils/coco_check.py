@@ -173,10 +173,10 @@ def parse_args():
     import argparse
     parser = argparse.ArgumentParser(description='Check ann_file')
     parser.add_argument('--ann_file',
-                        default='/home/lifeng/undone-work/DefectNet/tools/data/tile/annotations/instance_all.json',
+                        default='/home/lifeng/undone-work/DefectNet/tools/data/tile/annotations/cut_images_all.json',
                         help='annotation file or test image directory')
     parser.add_argument('--save_name',
-                        default='/home/lifeng/undone-work/DefectNet/tools/data/tile/annotations/instance_all-check.json',
+                        default='/home/lifeng/undone-work/DefectNet/tools/data/tile/annotations/cut_images_all-check.json',
                         help='save_name')
     parser.add_argument('--img_dir',
                         default='"/home/lifeng/undone-work/dataset/detection/tile/tile_round1_train_20201231/train_imgs/"',
