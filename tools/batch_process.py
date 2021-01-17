@@ -61,7 +61,7 @@ def batch_test(cfgs, save_dir, sleep_time=0, mode='test', json_out_heads=None):
                 json_out_head = json_out_heads
         eval_test_params = dict(
             config=cfg,
-            checkpoint=osp.join(cfg.work_dir, 'latest.pth'),
+            checkpoint=osp.join(cfg.work_dir, 'epoch_12.pth'),
             json_out=osp.join(cfg.work_dir, 'data_mode={}+{}.json'.format(mode, json_out_head)),
             mode=mode,
         )

@@ -54,7 +54,7 @@ class BatchTrain(object):
         cfg.first_model_cfg = None
         cfg.cfg_name = str(self.cfg_name)
         cfg.uid = str(self.cfg_name) if 'uid' not in kwargs else kwargs['uid']
-        cfg.resume_from = os.path.join(cfg.work_dir, 'latest.pth')
+        cfg.resume_from = os.path.join(cfg.work_dir, 'epoch_12.pth')
         if not os.path.exists(cfg.resume_from):
             cfg.resume_from = None
 

@@ -111,6 +111,7 @@ class CutROI(object):
             raise Exception("No such {} implement method!".format(method))
 
     def __call__(self, results):
+        results['no_roi_img_shape'] = results['img'].shape
         rect, pts = CutROI.cut_max_rect(results['img'], self.threshold, self.method)
         if rect is None:
             return None

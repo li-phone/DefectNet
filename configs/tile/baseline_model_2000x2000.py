@@ -192,8 +192,8 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + '/annotations/cut_images_train.json',
-        img_prefix=data_root + '/tile_round1_train_20201231/cut_train_imgs/',
+        ann_file=data_root + '/annotations/cut_1000x1000/cut_1000x1000_train.json',
+        img_prefix=data_root + '/trainval/cut_1000x1000',
         # category_ids for not load and not train, start from 1
         # ignore_ids=[1],
         pipeline=train_pipeline),
@@ -201,8 +201,8 @@ data = dict(
         type=dataset_type,
         # ann_file=data_root + '/annotations/submit_testA.json',
         # img_prefix=data_root + '/tile_round1_testA_20201231/testA_imgs/',
-        ann_file=data_root + '/annotations/cut_images_test.json',
-        img_prefix=data_root + '/tile_round1_train_20201231/cut_train_imgs/',
+        ann_file=data_root + '/annotations/cut_1000x1000/cut_1000x1000_test.json',
+        img_prefix=data_root + '/trainval/cut_1000x1000',
         # category_ids for not coco_eval, start from 0
         # ignore_ids=[0],
         pipeline=test_pipeline))
@@ -231,7 +231,7 @@ first_model_cfg = None
 total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = '../work_dirs/' + dataset_name + '/baseline_model_2000x2000'
+work_dir = '/data/liphone/detcomp/mmdet-v2/tile/baseline_cut_1000x1000/'
 resume_from = None
 load_from = '../work_dirs/pretrained/cascade_rcnn_r50_fpn_1x_coco_20200316-3dc56deb.pth'
 workflow = [('train', 1)]

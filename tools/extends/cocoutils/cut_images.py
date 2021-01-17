@@ -12,7 +12,7 @@ from convert2coco import _get_box
 
 loadImage = LoadImageFromFile()
 cutROI = CutROI()
-cutImage = CutImage(window=(1000, 1000), step=(500, 500), order_index=False, )
+cutImage = CutImage(window=(1000, 1000), step=(500, 500), order_index=False)
 
 img_dir = "/home/lifeng/undone-work/dataset/detection/tile/tile_round1_train_20201231/train_imgs/"
 save_img_dir = "/home/lifeng/undone-work/dataset/detection/tile/tile_round1_train_20201231/cut_train_imgs/"

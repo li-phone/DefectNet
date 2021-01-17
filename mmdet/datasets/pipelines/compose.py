@@ -28,7 +28,7 @@ class Compose(object):
                 break
             if data is None:
                 return None
-        if isinstance(data, list):
+        if (last_ind + 1) < len(self.transforms) and isinstance(data, list):
             data, data_list = [], data
             for idx, d in enumerate(data_list):
                 for i, t in enumerate(self.transforms[last_ind + 1:]):
