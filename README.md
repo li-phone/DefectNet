@@ -15,6 +15,14 @@ DefectNet, a defect detection network model for fast and effective defect detect
 ### Detection Efficiency
 ![Fig-04](imgs/4.jpg)
 
+### Experimental Results
+
+#### Fabric Defect
+![Fig-05](imgs/5.jpg)
+
+#### Bottle Defect
+![Fig-06](imgs/6.jpg)
+
 ## Installation
 mirror: [https://gitee.com/liphone/DefectNet.git](https://gitee.com/liphone/DefectNet.git)
 
