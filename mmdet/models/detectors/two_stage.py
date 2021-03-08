@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+from mmcv.utils.config import Dict
 from mmdet.core import bbox2result, bbox2roi, build_assigner, build_sampler
 from .. import builder
 from ..registry import DETECTORS
@@ -19,6 +20,8 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
 
     def __init__(self,
                  backbone,
+                 dfn_balance=None,
+                 ignore_ids=None,
                  neck=None,
                  shared_head=None,
                  rpn_head=None,
@@ -31,6 +34,12 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
                  pretrained=None):
         super(TwoStageDetector, self).__init__()
         self.backbone = builder.build_backbone(backbone)
+
+        if dfn_balance is None:
+            self.dfn_balance = dfn_balance
+        else:
+            self.dfn_balance = Dict(dfn_balance)
+        self.ignore_ids = ignore_ids
 
         if neck is not None:
             self.neck = builder.build_neck(neck)
@@ -94,6 +103,22 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
             x = self.neck(x)
         return x
 
+    def extract_defect_feat(self, img, targets=None):
+        if targets is None:
+            x1, x2 = self.backbone(img, detector=True)
+            score = x2.softmax(dim=1)
+            label = int(score.argmax(dim=1))
+            if label == 0:
+                return x1, label
+            if self.with_neck:
+                x1 = self.neck(x1)
+            return x1, label
+        else:
+            x1, x2 = self.backbone(img, detector=True, targets=targets)
+            if self.with_neck:
+                x1 = self.neck(x1)
+            return x1, x2
+
     def forward_dummy(self, img):
         """Used for computing network flops.
 
@@ -127,6 +152,22 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
             outs = outs + (mask_pred,)
         return outs
 
+    def get_dfn_weight(self, n=None):
+        k = self.dfn_balance.scale_factor
+        w0 = self.dfn_balance.init_weight
+        T = self.dfn_balance.period
+        if self.dfn_balance.type == 'constant':
+            return w0
+        elif self.dfn_balance.type == 'linear':
+            return -k * (n / T) + w0
+        elif self.dfn_balance.type == 'inverse':
+            return k * w0 / ((n / T) + 1)
+        elif self.dfn_balance.type == 'exponent':
+            a = self.dfn_balance.base
+            return k * w0 / (max(a ** (n / T), 1e-6))
+        else:
+            raise Exception('No {} implement'.format(str(self.dfn_balance.type)))
+
     def forward_train(self,
                       img,
                       img_meta,
@@ -134,7 +175,9 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
                       gt_labels,
                       gt_bboxes_ignore=None,
                       gt_masks=None,
-                      proposals=None):
+                      proposals=None,
+                      epoch=None,
+                      **kwargs):
         """
         Args:
             img (Tensor): of shape (N, C, H, W) encoding input images.
@@ -163,9 +206,67 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
         Returns:
             dict[str, Tensor]: a dictionary of loss components
         """
-        x = self.extract_feat(img)
+        # x = self.extract_feat(img)
 
         losses = dict()
+
+        # keep the original usage
+        if self.dfn_balance is None:
+            x = self.extract_feat(img)
+        else:
+            # count the number of defects in each image
+            defect_nums = [0] * img.shape[0]
+            for i, gt_label in enumerate(gt_labels):
+                defect_cnt = 0
+                for label in gt_label:
+                    if self.dfn_balance.background_id != int(label):
+                        defect_cnt += 1
+                defect_nums[i] = defect_cnt
+
+            # split the images into defect(1) image and normal(0) image
+            dfn_labels = [0 if i == 0 else 1 for i in defect_nums]
+            dfn_labels = torch.Tensor(dfn_labels).long().cuda()
+
+            # calculate dfn loss
+            x, dfn_loss = self.extract_defect_feat(img, targets=dfn_labels)
+
+            # balance different network loss
+            dfn_weight = self.get_dfn_weight(epoch)
+            loss_dfn = dfn_loss['loss']
+            loss_dfn = loss_dfn * dfn_weight
+            losses.update(loss_dfn=loss_dfn)
+
+            # delete the ignored annotations
+            if self.ignore_ids is not None:
+                for ignore_id in self.ignore_ids:
+                    for i, gt_label in enumerate(gt_labels):
+                        keep_ind = gt_label != ignore_id
+                        gt_labels[i] = gt_labels[i][keep_ind]
+                        gt_bboxes[i] = gt_bboxes[i][keep_ind]
+                keep_ind = [True] * len(gt_labels)
+                for i in range(len(gt_labels) - 1, -1, -1):
+                    if gt_labels[i].shape[0] == 0:
+                        img_meta.pop(i)
+                        gt_bboxes.pop(i)
+                        gt_labels.pop(i)
+                        keep_ind[i] = False
+                img = img[keep_ind]
+                x = list(x)
+                for i in range(len(x)):
+                    x[i] = x[i][keep_ind]
+                x = tuple(x)
+
+                # if have no any images, then set all loss to be 0 except dfn loss
+                if len(gt_labels) == 0 or len(gt_bboxes) == 0 or img.shape[0] == 0:
+                    loss_zeros = [torch.Tensor([0.]).float().cuda() for i in range(len(x))]
+                    loss_ones = [torch.Tensor([1.]).float().cuda() for i in range(len(x))]
+                    losses.update(loss_rpn_cls=loss_zeros, loss_rpn_bbox=loss_zeros)
+                    loss_zero = torch.Tensor([0.]).float().cuda()
+                    loss_one = torch.Tensor([1.]).float().cuda()
+                    losses['loss_cls'] = loss_zero
+                    losses['loss_bbox'] = loss_zero
+                    losses['acc'] = loss_one
+                    return losses
 
         # RPN forward and loss
         if self.with_rpn:
@@ -297,7 +398,18 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
         """Test without augmentation."""
         assert self.with_bbox, "Bbox head must be implemented."
 
-        x = self.extract_feat(img)
+        # x = self.extract_feat(img)
+
+        if self.dfn_balance is None:
+            x = self.extract_feat(img)
+        elif self.dfn_balance.init_weight == 0:
+            x, x2 = self.extract_defect_feat(img)
+            if x2 == 0 and self.with_neck:
+                x = self.neck(x)
+        else:
+            x, x2 = self.extract_defect_feat(img)
+            if x2 == 0:
+                return x2
 
         if proposals is None:
             proposal_list = self.simple_test_rpn(x, img_meta,

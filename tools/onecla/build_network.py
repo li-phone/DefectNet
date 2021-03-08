@@ -118,7 +118,7 @@ def build_network(type, name, num_classes, gpus=[], **kwargs):
         model.classifier = nn.Sequential(nn.Dropout(p=0.8, inplace=True),
                                          nn.Linear(1280, num_classes))
     # model = FocalModel(model)
-    if torch.cuda.device_count() > 1:
+    if len(gpus) > 1 and torch.cuda.device_count() > 1:
         torch.cuda.set_device(gpus[0])
         model_gpu = nn.DataParallel(module=model, device_ids=gpus)
         model = model_gpu.cuda(gpus[0])

@@ -1,5 +1,19 @@
 # DefectNet
-DefectNet: Towards Fast and Effective Defect Detection.
+DefectNet, a defect detection network model for fast and effective defect detection. 
+![Fig-01](imgs/1.jpg)
+
+## Network Design
+
+### Defect Finding Network
+![Fig-02](imgs/2.jpg)
+
+### Balance Different Network
+![Fig-03-1](imgs/3-1.jpg)
+![Fig-03-2](imgs/3-2.jpg)
+![Fig-03-3](imgs/3-3.jpg)
+
+### Detection Efficiency
+![Fig-04](imgs/4.jpg)
 
 ## Installation
 mirror: [https://gitee.com/liphone/DefectNet.git](https://gitee.com/liphone/DefectNet.git)
@@ -12,7 +26,7 @@ mirror: [https://gitee.com/liphone/DefectNet.git](https://gitee.com/liphone/Defe
     
 ## Prepare Dataset
 
-###Fabric Defect Dataset 
+### Fabric Defect Dataset 
 
 **Baidu Disk**
 

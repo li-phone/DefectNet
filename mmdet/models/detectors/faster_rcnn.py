@@ -12,11 +12,15 @@ class FasterRCNN(TwoStageDetector):
                  bbox_head,
                  train_cfg,
                  test_cfg,
+                 dfn_balance=None,
+                 ignore_ids=None,
                  neck=None,
                  shared_head=None,
                  pretrained=None):
         super(FasterRCNN, self).__init__(
             backbone=backbone,
+            dfn_balance=dfn_balance,
+            ignore_ids=ignore_ids,
             neck=neck,
             shared_head=shared_head,
             rpn_head=rpn_head,

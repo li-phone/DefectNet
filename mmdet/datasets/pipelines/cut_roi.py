@@ -111,7 +111,7 @@ class CutROI(object):
             raise Exception("No such {} implement method!".format(method))
 
     def __call__(self, results):
-        results['no_roi_img_shape'] = results['img'].shape
+        results['cut_roi'] = {'ori_shape': results['img'].shape}
         rect, pts = CutROI.cut_max_rect(results['img'], self.threshold, self.method)
         if rect is None:
             return None
@@ -122,7 +122,8 @@ class CutROI(object):
 
         x1, y1, x2, y2 = [int(x) for x in rect]
         img = results['img'][y1:y2, x1:x2, :]
-        results['roi_top_left'] = [rect[0], rect[1]]
+        results['cut_roi']['top_left'] = [rect[0], rect[1]]
+        results['cut_roi__top_left'] = [rect[0], rect[1]]
         results['img_info']['height'] = img.shape[0]
         results['img_info']['width'] = img.shape[1]
         results['img'] = img
@@ -130,10 +131,10 @@ class CutROI(object):
         results['ori_shape'] = img.shape
 
         if self.training:
-            results['ann_info']['bboxes'][:, 0] -= results['roi_top_left'][0]
-            results['ann_info']['bboxes'][:, 2] -= results['roi_top_left'][0]
-            results['ann_info']['bboxes'][:, 1] -= results['roi_top_left'][1]
-            results['ann_info']['bboxes'][:, 3] -= results['roi_top_left'][1]
+            results['ann_info']['bboxes'][:, 0] -= results['cut_roi__top_left'][0]
+            results['ann_info']['bboxes'][:, 2] -= results['cut_roi__top_left'][0]
+            results['ann_info']['bboxes'][:, 1] -= results['cut_roi__top_left'][1]
+            results['ann_info']['bboxes'][:, 3] -= results['cut_roi__top_left'][1]
             results['gt_bboxes'] = results['ann_info']['bboxes']
         # # test draw cut roi
         # from mmdet.third_party.draw_box import DrawBox

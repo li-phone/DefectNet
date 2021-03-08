@@ -5,8 +5,12 @@ from mmdet.core import coco_eval
 
 def main():
     parser = ArgumentParser(description='COCO Evaluation')
-    parser.add_argument('--result', help='result file path')
-    parser.add_argument('--ann', help='annotation file path')
+    parser.add_argument('--result',
+                        default="/data/liphone/detcomp/mmdet-v2/tile/baseline_cut_1000x1000/data_mode=test+.bbox.json",
+                        help='result file path')
+    parser.add_argument('--ann',
+                        default="/home/lifeng/undone-work/dataset/detection/tile/annotations/cut_1000x1000/cut_1000x1000_test.json",
+                        help='annotation file path')
     parser.add_argument(
         '--types',
         type=str,

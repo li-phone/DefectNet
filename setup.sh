@@ -1,5 +1,6 @@
 # install pycocotools
 # shellcheck disable=SC2164
+# install coco
 cd dependence/cocoapi/PythonAPI
 python setup.py develop
 
@@ -8,6 +9,6 @@ cd ../../
 cd mmcv/
 python setup.py develop
 
-#install mmdet
+# install mmdet
 cd ../../
 python setup.py develop

@@ -25,14 +25,16 @@ class CutImage(object):
                 result = copy.deepcopy(results)
                 for k, v in result.items():
                     result[k] = copy.deepcopy(results[k])
-                result['top_left'] = [j, i]
-                result['no_cut_img_shape'] = [img_h, img_w, _]
+
+                results['cut_image'] = {'ori_shape': [img_h, img_w, _]}
+                result['cut_image']['top_left'] = [j, i]
+                result['cut_image__top_left'] = [j, i]
                 is_cut_img = True
                 if self.training:
-                    result['ann_info']['bboxes'][:, 0] -= result['top_left'][0]
-                    result['ann_info']['bboxes'][:, 2] -= result['top_left'][0]
-                    result['ann_info']['bboxes'][:, 1] -= result['top_left'][1]
-                    result['ann_info']['bboxes'][:, 3] -= result['top_left'][1]
+                    result['ann_info']['bboxes'][:, 0] -= result['cut_image__top_left'][0]
+                    result['ann_info']['bboxes'][:, 2] -= result['cut_image__top_left'][0]
+                    result['ann_info']['bboxes'][:, 1] -= result['cut_image__top_left'][1]
+                    result['ann_info']['bboxes'][:, 3] -= result['cut_image__top_left'][1]
                     bboxes = result['ann_info']['bboxes']
                     keep_idx = [i for i in range(len(bboxes)) if bboxes[i][0] >= 0
                                 and bboxes[i][1] >= 0 and bboxes[i][2] < w1 and bboxes[i][3] < h1]
