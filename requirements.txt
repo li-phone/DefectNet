@@ -21,7 +21,7 @@ opencv-python==4.2.0.34
 opencv-python-headless==4.2.0.34
 packaging==20.3
 pandas==1.0.3
-Pillow==7.1.2
+Pillow==8.1.1
 pooch==1.1.0
 pyparsing==2.4.7
 python-dateutil==2.8.1
