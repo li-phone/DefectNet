@@ -1,5 +1,8 @@
 # DefectNet
 DefectNet, a defect detection network model for fast and effective defect detection. 
+
+Our paper is available at [IEEE Transactions on Instrumentation and Measurement](https://ieeexplore.ieee.org/document/9381247)
+
 ![Fig-01](imgs/1.jpg)
 
 ## Network Design
