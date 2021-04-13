@@ -1,8 +1,19 @@
 ## DefectNet
 DefectNet, a defect detection network model for fast and effective defect detection. 
+
+    @ARTICLE{9381247,
+      author={F. {Li} and F. {Li} and Q. {Xi}},
+      journal={IEEE Transactions on Instrumentation and Measurement}, 
+      title={DefectNet: Toward Fast and Effective Defect Detection}, 
+      year={2021},
+      volume={70},
+      number={},
+      pages={1-9},
+      doi={10.1109/TIM.2021.3067221}}
+
 The full paper is available at [IEEE Transactions on Instrumentation and Measurement](https://ieeexplore.ieee.org/document/9381247)
 
-#### Abstract
+## Abstract
 The existing object detection algorithms based on the convolutional neural 
 network (CNN) are always devoted to the detection of natural objects and 
 have achieved admirable detection effects. At present, these detection 
@@ -24,7 +35,7 @@ scores by using a score threshold. N: normal images. D: detected defect results.
 CNet: binary classification network. CDNet: defect network. (a) One-model method.
 (b) Two-model method. (c) DefectNet method.
 
-#### Network Design
+## Network Design
 
 - **Defect Finding Network**
 
@@ -69,7 +80,7 @@ the proportion of the number of normal images in test set. β is the
 ratio of the ATT_N to the ATT_D. t is the ATT of test set. e is the 
 improvement efficiency of test set.
 
-#### Experimental Results
+## Experimental Results
 
 - **Fabric Defect**
 
@@ -83,7 +94,7 @@ improvement efficiency of test set.
     liquor dataset is shown in Tab. 2.    
     ![Tab-02](imgs/Tab-02.jpg)
 
-#### Installation
+## Installation
 
 This project is based on [MMDetection](https://github.com/open-mmlab/mmdetection).
 More installation and usage please refer to [MMDetection](https://github.com/open-mmlab/mmdetection).
@@ -94,7 +105,7 @@ More installation and usage please refer to [MMDetection](https://github.com/ope
     pip install -r requirements.txt
     bash setup.sh
     
-#### Prepare Dataset
+## Prepare Dataset
 
 - **Fabric Defect Dataset**
 
@@ -122,7 +133,7 @@ More installation and usage please refer to [MMDetection](https://github.com/ope
     | train      | 3612     | 921      | 2691         | 0.25              | 
     | test       | 904      | 225      | 679          | 0.25              |
     
-#### Train and Test
+## Train and Test
 
     cd tools
     ln -s {data directory} data 
@@ -173,7 +184,7 @@ Test on GTX 1080Ti GPU:
 |defectnet_exponential|  0.489 | 0.934 | 67.889 |defectnet_exponential+cascade_rcnn_r50_fpn_1x| 
  -->
 
-#### License
+## License
 
 This project is released under the [Apache 2.0 license](LICENSE).
 
